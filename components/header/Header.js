@@ -12,8 +12,7 @@ const MyHeader=({navigation})=>{
     <Header
     containerStyle={{borderBottomColor:"transparent",elevation:5,backgroundColor:"#F46049",opacity:0.8}}
     leftComponent={
-
-          <Animatable.View animation={isDrawerOpen? 'fadeInLeft':'fadeInRight'} >
+          <Animatable.View animation={isDrawerOpen? 'bounceInLeft':'slideInRight'} delay={0} >
            <Icon
             style={{color:'#fff'}}
             size={20}

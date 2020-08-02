@@ -8,7 +8,7 @@ export default function Home({ navigation }){
 
     return(
       <SafeAreaView  style={styles.container}>
-      <StatusBar backgroundColor="#FF8585"  barStyle="light-content" />
+      <StatusBar backgroundColor="#FF7772"  barStyle="light-content" />
           <Header 
             containerStyle={{borderBottomColor:"transparent",elevation:5,backgroundColor:"#F46049",opacity:0.8}}
             centerComponent={
@@ -40,7 +40,7 @@ export default function Home({ navigation }){
                       color="red"
                     />
                   }
-                  onPress={()=>navigation.navigate("Convert")}
+                  onPress={()=>navigation.navigate("Sign In")}
                    />
                  <View style={{height:2}}></View>
                  <Button title="Sign Up"

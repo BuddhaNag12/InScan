@@ -51,6 +51,10 @@ export default function CustomDrawer(props){
 
     const isDrawerOpen = useIsDrawerOpen();
     const signOut=()=>{
+      GoogleSignin.configure({
+        webClientId: '348211842811-ggg8maqm40do9bhe7pjoenhopmcs9u9o.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+        offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+        });
       if(user.name)
       {
        GoogleSignin.signOut().then(()=>{

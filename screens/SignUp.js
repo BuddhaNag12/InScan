@@ -114,7 +114,7 @@ export default function Signup({navigation}){
               <Text style={{fontFamily:"Roboto",padding:2,}}>Already Signed up ?</Text>
               <Button raised 
               titleStyle={{fontFamily:"Roboto"}}
-              title="login" onPress={()=>navigation.navigate('Camera')} buttonStyle={{borderRadius:30,width:100}}/>
+              title="login" onPress={()=>navigation.navigate('Sign In')} buttonStyle={{borderRadius:30,width:100}}/>
             </View>
             </View>
        </ScrollView>

@@ -1,8 +1,10 @@
 import React,{useState} from 'react';
-import {Button,Divider,Text,Card,Input, ThemeProvider} from 'react-native-elements';
+import {Button,Divider,Text,Card,Input,Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import { View,ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View,ScrollView,StyleSheet,Dimensions } from 'react-native';
+
+const {height, width} = Dimensions.get('window');
+
 import {
     GoogleSignin,
     statusCodes,
@@ -16,6 +18,39 @@ const theme={
         borderRadius:30,
     }
 }
+
+const styles=StyleSheet.create({
+    container:{
+        flex:1,justifyContent:"center",alignItems:"center",  
+        backgroundColor:"#EAFFFE",
+    },
+    HeadingText:{
+        fontFamily:"Roboto",
+        fontSize:50,
+        color:"white",
+        textAlign:"center"
+    },
+    button:{
+        borderRadius:30,padding:10,backgroundColor:"#FC8686"
+    },
+    LoginForm:{
+        width:(width-10),
+        padding:10,
+        margin:5
+    },
+    socialButtonContainer:{
+        flex:1,
+    },
+    heading2Text:{
+        fontFamily:"Roboto",
+        textAlign:"center"
+    },
+    box1:{
+        borderBottomRightRadius:75,
+        backgroundColor:"#FFE4DE",
+        height:0.50*height,
+    }
+})
 export default function Signin({navigation}){
 
     const inputField = React.createRef();
@@ -25,7 +60,7 @@ export default function Signin({navigation}){
     const [pasError,setPasswordError] =useState('');
     const [loading,setLoading] =useState(false);
     const [passVisible,setpassVisible] =useState(true);
-    const [eye,setEye] =useState ('eye-slash');
+    const [eye,setEye] =useState ('eye-off');
     
     // const isSignedIn = async () => {
     //     try {
@@ -40,6 +75,7 @@ export default function Signin({navigation}){
     //     isSignedIn()
     //   },[])
 
+ 
     async function onGoogleButtonPress() {
         try {
             GoogleSignin.configure({
@@ -53,6 +89,7 @@ export default function Signin({navigation}){
 
           } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                return error;
               // user cancelled the login flow
             } else if (error.code === statusCodes.IN_PROGRESS) {
               // operation (f.e. sign in) is in progress already
@@ -61,6 +98,7 @@ export default function Signin({navigation}){
             } else {
               console.log(error);
             }
+            return error;
         }
       }
 
@@ -114,48 +152,61 @@ export default function Signin({navigation}){
     }
     const setVisiblePassword=()=>{
         setpassVisible(!passVisible)
-        eye=='eye'? setEye('eye-slash')
+        eye=='eye'? setEye('eye-off')
         :setEye('eye');
     }
     const SetrightIcon=()=>{
         return(
             <Icon
             name={eye}
+            type="ionicon"
             onPress={()=>setVisiblePassword()}
             size={20}
             />
         )
     }
     return(
-        <ThemeProvider theme={theme} >
-            <View style={{flex:1,justifyContent:"center"}}>
-            <ScrollView >
-            <Card containerStyle={{borderRadius:20,elevation:2}}>
+    
+    <View style={styles.container}>
+        <ScrollView >
+            <View style={{...styles.box1}}>
+          <Text style={styles.HeadingText}>InScan</Text>
+            <View style={styles.LoginForm}>
             <Input
-          
+            
+            inputContainerStyle={{
+                borderWidth:2,borderColor:'white',borderRadius:60,padding:10,
+                backgroundColor:"#fefefe"
+            }}
             leftIcon={
                 <Icon
-                name="envelope"
+                name="mail"
+                type="ionicon"
                 size={20}
-                color="black"
+                color="#FC8686"
                 />
             }
             ref={inputField}
-        placeholder='Email'
-        errorStyle={{ color: 'red' }}
-        errorMessage={EmailError}
+             placeholder='Email'
+             errorStyle={{ color: 'red' }}
+             errorMessage={EmailError}
             onChangeText={(val)=>setUsername(val)}
-        />
+           />
            <Input
+               inputContainerStyle={{
+                borderWidth:2,borderColor:'white',borderRadius:60,padding:10,
+                backgroundColor:"#fefefe"
+            }}
            secureTextEntry={passVisible} 
            ref={inputField}
            leftIcon={
             <Icon
-            color="black"
+            color="#FC8686"
+            type="ionicon"
             name="key"
             size={20}
             />}
-        rightIcon={
+         rightIcon={
             <SetrightIcon />
             }
         placeholder='Password'
@@ -164,45 +215,47 @@ export default function Signin({navigation}){
         onChangeText={(val)=>setPassword(val)}
         />
 
-        <Button raised title="Sign in" onPress={()=>Signin()} loading={loading} buttonStyle={{borderRadius:30,padding:10,backgroundColor:"#FC8686"}}/>
-            </Card>
-            <Card containerStyle={{justifyContent:"center",alignItems:"center",height:200, padding:2}}>
-                <Text style={{fontFamily:"Roboto",textAlign:"center"}}>Or Sign In with</Text>
-                <Button title="Google Sign In"
-                 onPress={()=>onGoogleButtonPress().then(()=>{
-                    navigation.navigate('Dashboard')
+            <Button raised title="Sign in" onPress={()=>Signin()} loading={loading}
+             buttonStyle={styles.button}/>
+             </View>
+            </View>
+            <View style={{...styles.socialButtonContainer}}>
+             <View style={{...StyleSheet.absoluteFillObject,backgroundColor:"#FFE4DE"}} />
+                <View style={{borderTopLeftRadius:75,backgroundColor:"#EAFFFE" ,
+
+                    }}>
+                    <Text style={styles.heading2Text}>Or Sign In with</Text>
+                    <View style={{alignItems:"center",flexDirection:"row",justifyContent:"center"}}>
+                     <Icon
+                     raised
+                     name="logo-google"
+                     type="ionicon"
+                     onPress={async()=>await onGoogleButtonPress().then(()=>{
+                     navigation.navigate('Dashboard')
                     }).catch(error=>{console.log(error)})}
-                raised
-                titleStyle={{color:"black",fontFamily:"Roboto_medium"}}
-                buttonStyle={{backgroundColor:"#fff",borderRadius:30}}
-                icon={
-                 <Icon name="google"
-                 color="red"
-                 size={30}
-                 style={{margin:3}}
+                     color="red"
+                     size={30}
+                     style={{margin:3}}
+                   />   
+                 <Icon
+                 raised
+                  name="logo-facebook"
+                  type="ionicon"
+                     color="blue"
+                     size={30}
+                     style={{margin:3}}
                  />   
-                }
-                /> 
-                <Divider style={{height:2,backgroundColor:'transparent'}} />
-                  <Button title="Facebook Sign In"
-                  raised
-                titleStyle={{color:"black",fontFamily:"Roboto_medium"}}
-                 buttonStyle={{backgroundColor:"#fff",borderRadius:30}}
-                icon={
-                 <Icon name="facebook"
-                 color="blue"
-                 size={30}
-                 style={{margin:3}}
-                 />   
-                }/> 
-            </Card>
+                    </View>
+                    <Button title="Create A new Account" onPress={()=>navigation.navigate("Sign Up")}
+                     titleStyle={{fontFamily:"Roboto"}}
+                      buttonStyle={{borderRadius:50,backgroundColor:"#FC8686"}}
+                      containerStyle={{width:200,alignSelf:"center"}}
+                      />
+                      
+                   </View>
+            </View>
+          
         </ScrollView>
-            
-         </View>
-  
-        </ThemeProvider>
-         
-
+     </View>
     )
-
 }

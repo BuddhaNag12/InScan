@@ -1,16 +1,18 @@
 
 import React, { useRef, useState } from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, ActivityIndicator,StatusBar } from 'react-native';
-import {Button} from "react-native-elements";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {StyleSheet, Text, View, ActivityIndicator,StatusBar,ScrollView } from 'react-native';
+import {Icon} from "react-native-elements";
 import { RNCamera } from 'react-native-camera';
 import vision from '@react-native-firebase/ml-vision';
 import CameraRoll from "@react-native-community/cameraroll";
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight=Dimensions.get('window').height;
 
 const PendingView = () => (
     <ActivityIndicator size="large" />
   );
-  var counter=0;
 
 export default function Camera ({navigation}) {
   const [flash,setFlash]=useState(RNCamera.Constants.FlashMode.on);
@@ -40,15 +42,13 @@ export default function Camera ({navigation}) {
   let CameraRef=useRef(null);
  
   const takePicture=async()=> {
-      counter++;
-      console.log(counter);
       const options = { quality: 0.5, base64: true };
       const data = await CameraRef.current.takePictureAsync(options);
       //console.log(data.uri);
-      navigation.navigate('Convert',{
-        uri:data.uri
-      })
-      //CameraRoll.save(data.uri,"Inscanner");
+      // navigation.navigate('Convert',{
+      //   uri:data.uri
+      // })
+      CameraRoll.save(data.uri,{type:"photo",album:"InScan"});
   }
 
   const toggleFlash=()=>{
@@ -59,14 +59,14 @@ export default function Camera ({navigation}) {
       setFlash(RNCamera.Constants.FlashMode.on)
     }
   }
-  const ToggleCam=()=>{
-    if(Cam==RNCamera.Constants.Type.back)
-    {
-      setCam(RNCamera.Constants.Type.front)
-    }else{
-      setCam(RNCamera.Constants.Type.back)
-    }
-  }
+  // const ToggleCam=()=>{
+  //   if(Cam==RNCamera.Constants.Type.back)
+  //   {
+  //     setCam(RNCamera.Constants.Type.front)
+  //   }else{
+  //     setCam(RNCamera.Constants.Type.back)
+  //   }
+  // }
       return (
         <View style={styles.container}>
           <StatusBar hidden />
@@ -91,26 +91,61 @@ export default function Camera ({navigation}) {
           {({ camera, status, recordAudioPermissionStatus }) => {
             if (status !== 'READY') return <PendingView />;
             return (
-              <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                 <TouchableOpacity onPress={() => toggleFlash()} style={styles.capture}>
-                  <Text style={{ fontSize: 14 }}> {flash==RNCamera.Constants.FlashMode.on? "Flash Off" : "Flash on" } </Text>
-                </TouchableOpacity>
-                <Button  icon={
-                <Icon
-                  name="camera"
-                  size={15}
+              <View >
+                  <View style={{
+                  alignItems:"flex-start",
+                  paddingLeft:6,
+                  height:windowHeight-100,
+                }}>
+                  <Icon
+                  name="home-outline"
+                  type="ionicon"
+                  size={30}
                   color="white"
-                />
-              }            
-             title="Scan" onPress={()=>takePicture()} loading={loading} />      
-                <TouchableOpacity onPress={() => ConvertPdf()} style={styles.capture}>
-                  <Text style={{ fontSize: 14 }}> Convert </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => ToggleCam()} style={styles.capture}>
-                  <Text style={{ fontSize: 14 }}> Toggle </Text>
-                </TouchableOpacity>
-             
+                  onPress={()=>navigation.navigate("Dashboard")}
+                /> 
               </View>
+              <View style={{
+                borderTopLeftRadius:30,
+                borderTopRightRadius:30,
+                width:windowWidth,
+                height:windowHeight/8,
+                flexDirection: 'row',
+                justifyContent: "space-around",   
+                alignItems:"center",      
+                backgroundColor:"grey"
+              }}>
+                <Icon 
+                  name="images-outline"
+                  type="ionicon"
+                  size={30}
+                  color="white"
+                  onPress={()=>navigation.navigate("Gallery")}
+                /> 
+                 <Icon
+                    name="camera-outline"
+                    type="ionicon"
+                  size={30}
+                  color="white"
+                  onPress={()=>takePicture()}
+                /> 
+                 <Icon
+                  name={flash==RNCamera.Constants.FlashMode.on ? 'flash-outline' : 'flash-off-outline'}
+                  size={30}
+                  type="ionicon"
+                  color="white"
+                  onPress={() => toggleFlash()}
+                /> 
+                 <Icon
+                  name="image-outline"
+                  type="ionicon"
+                  size={30}
+                  color="white"
+                  onPress={()=>takePicture()}
+                />              
+              </View>
+              </View>
+            
             );
           }}
         </RNCamera>

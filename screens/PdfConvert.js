@@ -9,6 +9,7 @@ import {
   Dimensions,
   ToastAndroid
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import {StyleSheet} from 'react-native';
 import CameraRoll from "@react-native-community/cameraroll";
@@ -68,21 +69,32 @@ export default function ConvertImageToPdf({route,navigation}){
   const [screenPath,setPath]=useState('');
   const getPDF = async() => {
 
-    CameraRoll.getPhotos({
-      first: 10,
-      assetType: 'Photos',
-    })
-    .then(r => {
+
+    ImagePicker.openPicker({
+      multiple: true
+    }).then(images => {
       const imageArray=[];
-      r.edges.map((arr)=>imageArray.push(arr.node.image.uri.substr(7)));
-    //  const u = pathImg[0].substr(7);
-    //  setPath({screenPath: u });
+      images.map((img)=>imageArray.push(img.path.substr(7)))
+      convertPdf(imageArray);
       console.log(imageArray);
-     convertPdf(imageArray);
-    })
-    .catch((err) => {
-     console.log(err);
     });
+
+
+    // CameraRoll.getPhotos({
+    //   first: 10,
+    //   assetType: 'Photos',
+    // })
+    // .then(r => {
+    //   const imageArray=[];
+    //   r.edges.map((arr)=>imageArray.push(arr.node.image.uri.substr(7)));
+    // //  const u = pathImg[0].substr(7);
+    // //  setPath({screenPath: u });
+    //   console.log(imageArray);
+    // // convertPdf(imageArray);
+    // })
+    // .catch((err) => {
+    //  console.log(err);
+    // });
 
    
   }

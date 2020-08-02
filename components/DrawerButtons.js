@@ -17,22 +17,20 @@ const styles=StyleSheet.create({
     }
 })
 const DrawerButtons=({routeTo,navigation,title,IconName})=>{
-
   return(
-    
     <Button    
      titleStyle={{textTransform:"uppercase",fontFamily:"Ionicons",color:"black",textAlign:"center"}}
       buttonStyle={styles.Button}
-     icon={
-     <Icon
-      name={IconName}
-      size={25}
-      color="#FF6366"
-     style={styles.icon}
-     />
-    }
+          icon={
+          <Icon
+            name={IconName}
+            size={25}
+            color="#FF6366"
+          style={styles.icon}
+          />
+         }
      title={title} onPress={()=>navigation.navigate(routeTo)}
-     />
+   />
    
   )
 

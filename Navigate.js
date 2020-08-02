@@ -1,4 +1,8 @@
 import React from 'react';
+// Component
+import {SignInTitle,SignUpTitle} from "./components/HeaderTitle";
+
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator} from '@react-navigation/drawer';
@@ -11,14 +15,13 @@ import Signin from './screens/SignIn';
 import Singup from './screens/SignUp';
 
 //drawers
-import CustomDrawer from './screens/drawers/drawerLayout/CustumDrawer'
+import CustomDrawer from './screens/drawers/drawerLayout/CustumDrawer';
 import HelpScreen from './screens/drawers/Help';
 import AboutScreen from './screens/drawers/About';
 import MyGallery from './screens/drawers/Gallery';
 import DocumentView from './screens/drawers/Documents';
 import ConvertImageToPdf from './screens/PdfConvert';
 
-import {Text} from 'react-native-elements';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -50,16 +53,7 @@ function DrawerNavigator(){
   )
 }
 
-const SignInTitle=()=> {
-  return (
-      <Text style={{fontFamily:"Roboto",color:"#fff"}}>Sign In</Text>
-  );
-}
-const SignUpTitle=()=> {
-  return (
-      <Text style={{fontFamily:"Roboto",color:"#fff"}}>Sign Up</Text>
-  );
-}
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -74,19 +68,13 @@ export default function App() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-        }}/>
-        
+         }}/>
+
         <Stack.Screen name="Camera" component={Camera}
          options={{headerShown: false}}
-      />
+         />
         <Stack.Screen name="Dashboard" component={DrawerNavigator}
          options={{headerShown: false}}
-      />
-        <Stack.Screen name="Convert" component={ConvertImageToPdf}
-         options={{headerShown: true}}
-      />
-        <Stack.Screen name="Document" component={DocumentView}
-         options={{headerShown: true}}
       />
 
         <Stack.Screen name="Sign In" component={Signin}
