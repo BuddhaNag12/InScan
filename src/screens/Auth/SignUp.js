@@ -1,11 +1,10 @@
 import React,{useState} from 'react';
-import {Button,Text,Card,Input, ThemeProvider} from 'react-native-elements';
-import { View,ScrollView } from 'react-native';
-
+import {Button,Text,Input} from 'react-native-elements';
+import { View,ScrollView,StyleSheet,Dimensions,TouchableOpacity } from 'react-native';
+import signUpStyle from './signUpStyle';
 import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
+const {height} = Dimensions.get('window');
 
 export default function Signup({navigation}){
     const [name,setName] =useState('')
@@ -44,12 +43,14 @@ export default function Signup({navigation}){
 
     return(
 
-        <ThemeProvider >   
-          <ScrollView>
-         <View style={{flex:1,justifyContent:"center"}}>
-            <Card containerStyle={{padding:5}}>
-            <Input
-
+         <View style={{...signUpStyle.container}}>
+       <ScrollView>
+           <View style={{...signUpStyle.box1}}>
+           <View style={{...signUpStyle.SignUpForm}}>
+          <Input
+         inputContainerStyle={{
+          ...signUpStyle.inputStyle
+          }}
         label='Full Name'
         placeholder="Full Name"
         placeholderTextColor={error?'red':"grey"}
@@ -58,18 +59,25 @@ export default function Signup({navigation}){
         onChangeText={(val)=>setName(val)}
         leftIcon={
           <Icon 
-          name="person-outline"
+          name="person"
+          size={15}
+          color="red"
           />
         }
         />
             <Input
-             labelStyle={{color:"black"}}
+             inputContainerStyle={{
+              ...signUpStyle.inputStyle
+          }}
+         labelStyle={{color:"black"}}
         placeholder='Email'
         label='Email'
         placeholderTextColor={error?"red":'grey'}
         leftIcon={
           <Icon 
-          name="mail-outline"
+          name="mail"
+          size={15}
+          color="red"
           />
         }
         errorStyle={{ color: 'red' }}
@@ -77,49 +85,62 @@ export default function Signup({navigation}){
             onChangeText={(val)=>setEmail(val)}
         />
            <Input
+            inputContainerStyle={{
+              ...signUpStyle.inputStyle
+          }}
             leftIcon={
               <Icon 
-              name="key-outline"
+              name="key"
+              size={15}
+              color="red"
               />
             }
             labelStyle={{color:"black"}}
             placeholderTextColor={error?"red":'grey'}
             label='Password'
-        placeholder='Password'
-        errorStyle={{ color: 'red' }}
+           placeholder='Password'
+           errorStyle={{ color: 'red' }}
         // errorMessage={error}
         onChangeText={(val)=>setPass(val)}
         />
           <Input
+           inputContainerStyle={{
+            ...signUpStyle.inputStyle
+          }}
           leftIcon={
             <Icon 
-            name="call-outline"
+            name="call"
+            size={15}
+            color="red"
             />
           }
           labelStyle={{color:"black"}}
-            placeholderTextColor={error?"red":'grey'}
-            label='Contact No'
+              placeholderTextColor={error?"red":'grey'}
+             label='Contact No'
              placeholder='Contact No'
-        errorStyle={{ color: 'red' }}
-        onChangeText={(val)=>setPhone(val)}
-        />
+             errorStyle={{ color: 'red' }}
+             onChangeText={(val)=>setPhone(val)}
+          />
            <Button raised
             titleStyle={{fontFamily:"Roboto"}}
             title="Sign Up" onPress={()=>signUpUser()}
-            buttonStyle={{borderRadius:30,padding:10,backgroundColor:"red"
+            buttonStyle={{borderRadius:30,padding:10,backgroundColor:"#0BBD00"
             }}
             />
-            </Card>
-            <View style={{justifyContent:"center",alignItems:"center",height:80}}>
+            </View>
+           </View>
+           <View style={{...signUpStyle.socialButtonContainer}}>
+           <View style={{...StyleSheet.absoluteFillObject,backgroundColor:"#FFE4DE"}} />
+           <View style={{borderTopLeftRadius:75,backgroundColor:"#EAFFFE",alignItems:"center",height:height}}>
               <Text style={{fontFamily:"Roboto",padding:2,}}>Already Signed up ?</Text>
-              <Button raised 
-              titleStyle={{fontFamily:"Roboto"}}
-              title="login" onPress={()=>navigation.navigate('Sign In')} buttonStyle={{borderRadius:30,width:100}}/>
+              <TouchableOpacity  onPress={()=>navigation.navigate("Sign In")}>
+                     <Text style={{textAlign:"center",fontFamily:"Roboto",fontSize:15}}>
+                        Log in
+                     </Text>
+                 </TouchableOpacity>
             </View>
-            </View>
+           </View>
        </ScrollView>
-     </ThemeProvider>
-
+     </View>
     )
-
 }

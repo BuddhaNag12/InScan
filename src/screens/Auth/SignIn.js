@@ -1,56 +1,14 @@
-import React,{useState} from 'react';
-import {Button,Divider,Text,Card,Input,Icon} from 'react-native-elements';
+import React,{useState,useEffect} from 'react';
+import {Button,Text,Input,Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import { View,ScrollView,StyleSheet,Dimensions } from 'react-native';
-
-const {height, width} = Dimensions.get('window');
+import { View,ScrollView,StyleSheet,TouchableOpacity } from 'react-native';
+import loginStyle from './loginStyle';
 
 import {
     GoogleSignin,
     statusCodes,
   } from '@react-native-community/google-signin';
 
-
-const fontName="Roboto_medium";
-
-const theme={
-    inputStyle:{
-        borderRadius:30,
-    }
-}
-
-const styles=StyleSheet.create({
-    container:{
-        flex:1,justifyContent:"center",alignItems:"center",  
-        backgroundColor:"#EAFFFE",
-    },
-    HeadingText:{
-        fontFamily:"Roboto",
-        fontSize:50,
-        color:"white",
-        textAlign:"center"
-    },
-    button:{
-        borderRadius:30,padding:10,backgroundColor:"#FC8686"
-    },
-    LoginForm:{
-        width:(width-10),
-        padding:10,
-        margin:5
-    },
-    socialButtonContainer:{
-        flex:1,
-    },
-    heading2Text:{
-        fontFamily:"Roboto",
-        textAlign:"center"
-    },
-    box1:{
-        borderBottomRightRadius:75,
-        backgroundColor:"#FFE4DE",
-        height:0.50*height,
-    }
-})
 export default function Signin({navigation}){
 
     const inputField = React.createRef();
@@ -62,39 +20,26 @@ export default function Signin({navigation}){
     const [passVisible,setpassVisible] =useState(true);
     const [eye,setEye] =useState ('eye-off');
     
-    // const isSignedIn = async () => {
-    //     try {
-    //         await GoogleSignin.revokeAccess();
-    //         await GoogleSignin.signOut();
-
-    //       } catch (error) {
-    //         console.error(error);
-    //       }
-    //   };
-    //   useEffect(()=>{
-    //     isSignedIn()
-    //   },[])
-
- 
     async function onGoogleButtonPress() {
+        setLoading(true);
         try {
-            GoogleSignin.configure({
-                webClientId: '348211842811-ggg8maqm40do9bhe7pjoenhopmcs9u9o.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-                offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+              GoogleSignin.configure({
+                webClientId: '348211842811-ggg8maqm40do9bhe7pjoenhopmcs9u9o.apps.googleusercontent.com',
+                offlineAccess: true,
                 });
             await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            const {name,email,photo} = userInfo.user;
-             return userInfo.user;
-
+            const { idToken } = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            const user= auth().signInWithCredential(googleCredential);
+            setLoading(false);
+             return user;
           } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                return error;
-              // user cancelled the login flow
+                console.log(error);
             } else if (error.code === statusCodes.IN_PROGRESS) {
-              // operation (f.e. sign in) is in progress already
+                console.log(error);
             } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-              // play services not available or outdated
+                console.log(error);
             } else {
               console.log(error);
             }
@@ -102,19 +47,6 @@ export default function Signin({navigation}){
         }
       }
 
-
-      const CheckUser=()=>{
-        setLoading(true);
-         auth().onAuthStateChanged((user)=>{
-          if(user){
-            setLoading(false);
-              navigation.navigate("Dashboard")
-          }
-          else{
-            setLoading(false);
-          }
-         })
-      }
     const Signin=()=>{
         setLoading(true);
         if(!username){
@@ -129,10 +61,8 @@ export default function Signin({navigation}){
             setPasswordError("");
                     auth()
             .signInWithEmailAndPassword(username,password)
-            .then((uid) => {
-                navigation.navigate("Dashboard",{
-                    id:uid.uid
-                });
+            .then(() => {
+                navigation.navigate("Dashboard");
                 setLoading(false);
             })
             .catch(error => {
@@ -166,12 +96,11 @@ export default function Signin({navigation}){
         )
     }
     return(
-    
-    <View style={styles.container}>
+    <View style={loginStyle.container}>
         <ScrollView >
-            <View style={{...styles.box1}}>
-          <Text style={styles.HeadingText}>InScan</Text>
-            <View style={styles.LoginForm}>
+            <View style={{...loginStyle.box1}}>
+          <Text style={loginStyle.HeadingText}>InScan</Text>
+            <View style={loginStyle.LoginForm}>
             <Input
             
             inputContainerStyle={{
@@ -206,25 +135,23 @@ export default function Signin({navigation}){
             name="key"
             size={20}
             />}
-         rightIcon={
-            <SetrightIcon />
-            }
-        placeholder='Password'
-        errorStyle={{ color: 'red' }}
-        errorMessage={pasError}
-        onChangeText={(val)=>setPassword(val)}
-        />
+              rightIcon={
+                <SetrightIcon />
+                }
+                placeholder='Password'
+                errorStyle={{ color: 'red' }}
+                errorMessage={pasError}
+                onChangeText={(val)=>setPassword(val)}
+                />
 
-            <Button raised title="Sign in" onPress={()=>Signin()} loading={loading}
-             buttonStyle={styles.button}/>
+            <Button raised title="Log in" onPress={()=>Signin()} loading={loading}
+             buttonStyle={loginStyle.button} titleStyle={{fontFamily:"Roboto"}} />
              </View>
             </View>
-            <View style={{...styles.socialButtonContainer}}>
+            <View style={{...loginStyle.socialButtonContainer}}>
              <View style={{...StyleSheet.absoluteFillObject,backgroundColor:"#FFE4DE"}} />
-                <View style={{borderTopLeftRadius:75,backgroundColor:"#EAFFFE" ,
-
-                    }}>
-                    <Text style={styles.heading2Text}>Or Sign In with</Text>
+                <View style={{borderTopLeftRadius:75,backgroundColor:"#EAFFFE"}}>
+                    <Text style={loginStyle.heading2Text}>Or Log In with</Text>
                     <View style={{alignItems:"center",flexDirection:"row",justifyContent:"center"}}>
                      <Icon
                      raised
@@ -237,20 +164,21 @@ export default function Signin({navigation}){
                      size={30}
                      style={{margin:3}}
                    />   
-                 <Icon
-                 raised
-                  name="logo-facebook"
-                  type="ionicon"
+                     <Icon
+                     raised
+                      name="logo-facebook"
+                      type="ionicon"
                      color="blue"
                      size={30}
                      style={{margin:3}}
-                 />   
+                  />   
                     </View>
-                    <Button title="Create A new Account" onPress={()=>navigation.navigate("Sign Up")}
-                     titleStyle={{fontFamily:"Roboto"}}
-                      buttonStyle={{borderRadius:50,backgroundColor:"#FC8686"}}
-                      containerStyle={{width:200,alignSelf:"center"}}
-                      />
+                      <Text style={{textAlign:"center",paddingTop:20,fontFamily:"Roboto"}}>Need an account</Text>
+                     <TouchableOpacity  onPress={()=>navigation.navigate("Sign Up")}>
+                     <Text style={{textAlign:"center",fontFamily:"Roboto",fontSize:15}}>
+                        Create A new Account
+                     </Text>
+                     </TouchableOpacity>
                       
                    </View>
             </View>

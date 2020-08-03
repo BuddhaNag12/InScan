@@ -1,9 +1,10 @@
 import React from 'react';
 import {Button,Header} from 'react-native-elements';
-import {SafeAreaView ,View,StatusBar,ImageBackground,StyleSheet} from 'react-native';
+import {SafeAreaView ,View,StatusBar,ImageBackground,StyleSheet,Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const image = require("../assets/back.png");
-
+const image = require("../../assets/home2.png");
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 export default function Home({ navigation }){
 
     return(
@@ -87,9 +88,9 @@ const styles=StyleSheet.create({
       },
      image: {
         flex: 1,
-        resizeMode:"cover",
-        padding:5,
-        justifyContent:"flex-end"
+        width:windowWidth-20,
+        resizeMode:"contain",
+        height:windowHeight-50*0.8,
       },
       ActionCard:{
         flex:1,

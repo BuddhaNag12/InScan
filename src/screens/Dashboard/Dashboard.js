@@ -1,11 +1,11 @@
 import React from 'react';
 import {Icon} from 'react-native-elements';
 import {View,StyleSheet, Image,Text} from 'react-native';
-import MyHeader from '../components/header/Header';
+import MyHeader from '../../components/header/Header';
 import * as Animatable from 'react-native-animatable';
 
 
-const image = require("../assets/phone.png");
+const image = require("../../../assets/phone.png");
 const h1=30;
 const h2=25;
 const h3=20;
