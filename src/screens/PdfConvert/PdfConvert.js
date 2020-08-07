@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   View,
@@ -7,78 +7,77 @@ import {
   Alert,
   TouchableOpacity,
   Dimensions,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import {StyleSheet} from 'react-native';
-import CameraRoll from "@react-native-community/cameraroll";
-const Width= Dimensions.get('screen').width;
-const Height= Dimensions.get('screen').height;
+import CameraRoll from '@react-native-community/cameraroll';
+const Width = Dimensions.get('screen').width;
+const Height = Dimensions.get('screen').height;
 
-const style= StyleSheet.create({
-container : {
-    flex:1,
-    justifyContent: "center",
-    alignItems : 'center',
-    backgroundColor: '#fff' ,
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#000'
+    borderColor: '#000',
   },
-image : {
-    width: Width*0.9,
-    height: Height*0.35,
+  image: {
+    width: Width * 0.9,
+    height: Height * 0.35,
     resizeMode: 'contain',
-    marginTop: Height*0.02
-},
-titleText : {
-    fontSize:20,
+    marginTop: Height * 0.02,
+  },
+  titleText: {
+    fontSize: 20,
     fontFamily: 'monospace',
     color: 'black',
     fontWeight: 'bold',
-    marginTop:Height*0.01
-},
-descText : {
+    marginTop: Height * 0.01,
+  },
+  descText: {
     color: 'green',
     fontSize: 16,
     fontStyle: 'italic',
-    fontWeight:'900',
-    marginTop: Height*0.03,
-    marginLeft: Width*0.03
-},
-button : {
-    borderWidth:1,
-    marginTop:Height*0.04,
+    fontWeight: '900',
+    marginTop: Height * 0.03,
+    marginLeft: Width * 0.03,
+  },
+  button: {
+    borderWidth: 1,
+    marginTop: Height * 0.04,
     padding: '2%',
     borderRadius: 5,
     backgroundColor: 'lightgreen',
-    width: Width*0.75,
-    height: Height*0.07,
-    alignItems:'center'
-},
-buttonText : {
+    width: Width * 0.75,
+    height: Height * 0.07,
+    alignItems: 'center',
+  },
+  buttonText: {
     color: 'black',
-    fontSize:25,
-    fontWeight:'bold',
-    fontFamily:'monospace'
-}
+    fontSize: 25,
+    fontWeight: 'bold',
+    fontFamily: 'monospace',
+  },
 });
 
-export default function ConvertImageToPdf({route,navigation}){
-  const {uri} =route.params ? route.params :'';
-  const [screenPath,setPath]=useState('');
-  const getPDF = async() => {
+export default function ConvertImageToPdf({route, navigation}) {
+  const {uri} = route.params ? route.params : '';
+  const [screenPath, setPath] = useState('');
 
-
+  
+  const getPDF = async () => {
     ImagePicker.openPicker({
-      multiple: true
-    }).then(images => {
-      const imageArray=[];
-      images.map((img)=>imageArray.push(img.path.substr(7)))
+      multiple: true,
+    }).then((images) => {
+      const imageArray = [];
+      images.map((img) => imageArray.push(img.path.substr(7)));
       convertPdf(imageArray);
       console.log(imageArray);
     });
-
 
     // CameraRoll.getPhotos({
     //   first: 10,
@@ -95,12 +94,10 @@ export default function ConvertImageToPdf({route,navigation}){
     // .catch((err) => {
     //  console.log(err);
     // });
+  };
 
-   
-  }
-
-  const convertPdf= async(imgPath)=>{
-    try{
+  const convertPdf = async (imgPath) => {
+    try {
       // convert image to pdf
       const options = {
         imagePaths: imgPath,
@@ -110,45 +107,40 @@ export default function ConvertImageToPdf({route,navigation}){
           width: 900,
           height: Math.round(
             (Dimensions.get('screen').height / Dimensions.get('screen').width) *
-            900,
+              900,
           ),
         },
         quality: 1.0, // optional compression paramter
       };
-      RNImageToPdf.createPDFbyImages(options).then(pdf=>{
-        navigation.navigate('Document',{
-          pdfUri:pdf.filePath
-        })
-      })
+      RNImageToPdf.createPDFbyImages(options).then((pdf) => {
+        navigation.navigate('Document', {
+          pdfUri: pdf.filePath,
+        });
+      });
       // ToastAndroid.show("PDF saved at location "+pdf.filePath, ToastAndroid.LONG);
-     // console.log(pdf.filePath);
-    }
-    catch(e){
+      // console.log(pdf.filePath);
+    } catch (e) {
       console.log(e);
     }
-  }
-    return(
-      <View style={style.container}>
-        <Image
-          source={{uri}}
-          style={{ width: 400, height: 400 }}
-          PlaceholderContent={<ActivityIndicator />}
-        />     
-     <View>
-          
-              <View>
-                <TouchableOpacity style={style.button} 
-                onPress={
-                  async ()=>{
-                    await getPDF();
-                  }
-                }>
-                  <Text style={style.buttonText}>Convert To PDF</Text>
-                </TouchableOpacity>
-              </View> 
+  };
+  return (
+    <View style={style.container}>
+      <Image
+        source={{uri}}
+        style={{width: 400, height: 400}}
+        PlaceholderContent={<ActivityIndicator />}
+      />
+      <View>
+        <View>
+          <TouchableOpacity
+            style={style.button}
+            onPress={async () => {
+              await getPDF();
+            }}>
+            <Text style={style.buttonText}>Convert To PDF</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    );
-
-
+    </View>
+  );
 }
