@@ -44,7 +44,7 @@ const ImageGrid = ({navigation}) => {
     selectedImageUri([]);
     setSel(false)
   };
-  const convertSinglePdf = async () => {
+  const convertMultipleImage = async () => {
     const NewImgPath = imgUri.map((i) => i.substr(7));
     try {
       const options = {
@@ -171,7 +171,7 @@ const ImageGrid = ({navigation}) => {
                   name="document-attach-outline"
                   type="ionicon"
                   color="#FF5D5D"
-                  onPress={() => convertSinglePdf()}
+                  onPress={() => convertMultipleImage()}
                   />
             </View>
           ) : (
