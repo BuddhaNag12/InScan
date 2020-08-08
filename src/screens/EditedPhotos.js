@@ -92,11 +92,14 @@ export default class EditedPhotos extends React.Component {
           <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
             Convert Multiple image click here
           </Text>
+          
           <Button
+            raised
+            titleStyle={{fontFamily:"Roboto",color:"black"}}
+            containerStyle={{justifyContent:"center",alignItems:"center"}}
+            buttonStyle={{borderRadius:50,backgroundColor:"#FFE4DE"}}
             title="Multiple image convert"
             onPress={() => this.props.navigation.navigate('Convert')}
-            containerStyle={{borderRadius: 30}}
-            buttonStyle={{backgroundColor: 'red'}}
           />
         </View>
         <ScrollView horizontal>

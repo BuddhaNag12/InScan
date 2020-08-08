@@ -5,8 +5,7 @@ import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import DrawerButtons from '../../../components/DrawerButtons';
-const {height, width} = Dimensions.get('window');
-import {GoogleSignin} from '@react-native-community/google-signin';
+const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   Button: {
     borderRadius: 30,

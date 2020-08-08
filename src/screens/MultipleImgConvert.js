@@ -3,8 +3,6 @@ import {
   FlatList,
   TouchableOpacity,
   View,
-  ScrollView,
-  ActivityIndicator,
   PermissionsAndroid,
   Platform,
   Dimensions,
@@ -42,11 +40,12 @@ const ImageGrid = ({navigation}) => {
     });
   };
   //todo delete image selected
-// const deleteSeleted=(index)=>{
-//   selectedImageUri((prev)=>[prev.splice(1,index)])
-// }
+  const reset = () => {
+    selectedImageUri([]);
+    setSel(false)
+  };
   const convertSinglePdf = async () => {
-    const NewImgPath=imgUri.map((i)=>i.substr(7))
+    const NewImgPath = imgUri.map((i) => i.substr(7));
     try {
       const options = {
         imagePaths: NewImgPath,
@@ -95,7 +94,6 @@ const ImageGrid = ({navigation}) => {
   const selectedImage = (uri) => {
     setSel(true);
     selectedImageUri((imgUri) => [...imgUri, uri]);
-    console.log('setimgUri==>', imgUri);
   };
 
   return (
@@ -127,42 +125,62 @@ const ImageGrid = ({navigation}) => {
           )}
         />
       </View>
-      {imgUri ? 
-            <View style={{flex:1}}>
-            {sel?  <Text style={{textAlign:"center",fontFamily:"Roboto"}}>selected Images</Text> :
-            <Text style={{textAlign:"center",fontFamily:"Roboto"}}>Selected image will show here...</Text>
-             }
-              <FlatList
-                data={imgUri}
-                keyExtractor={(_, index) => index}
-                numColumns={4}
-                renderItem={({item, index}) => (
-                  <View style={{flex: 1}}>
-                      <Image
-                        source={{uri:item}} // Use item to set the image source
-                        key={index} // Important to set a key for list items
-                        style={{
-                          width: 100,
-                          height: 100,
-                          borderWidth: 3,
-                          borderColor: 'white',
-                          resizeMode: 'contain',
-                          margin: 8,
-                        }}
-                      />
-                      <Icon 
-                       name="trash-outline"
-                       type="ionicon"
-                      size={30}
-                      onPress={()=>deleteSeleted(index)}
-                      />
-                  </View>
-                )}
-              />
-             {sel?  <Button title="Pdf" onPress={()=>convertSinglePdf()} /> : <></> }
+      {sel ? (
+        <View style={{flex: 1}}>
+          {sel ? (
+            <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+              selected Images
+            </Text>
+          ) : (
+            <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+              Selected image will show here...
+            </Text>
+          )}
+          <FlatList
+            data={imgUri}
+            keyExtractor={(_, index) => index}
+            numColumns={4}
+            renderItem={({item, index}) => (
+              <View style={{flex: 1}}>
+                <Image
+                  source={{uri: item}} // Use item to set the image source
+                  key={index} // Important to set a key for list items
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderWidth: 3,
+                    borderColor: 'white',
+                    resizeMode: 'contain',
+                    margin: 8,
+                  }}
+                />
+              </View>
+            )}
+          />
+
+          {sel ? (
+            <View style={{justifyContent:"center",alignItems:"center",padding:3}}>
+              <Button
+              raised
+              titleStyle={{fontFamily:"Roboto",color:"black"}}
+              containerStyle={{justifyContent:"center",alignItems:"center"}}
+              buttonStyle={{borderRadius:50,backgroundColor:"#FFE4DE"}}
+              title="reset selection" onPress={() => reset()} />
+                 <Icon
+                  raised
+                  name="document-attach-outline"
+                  type="ionicon"
+                  color="#FF5D5D"
+                  onPress={() => convertSinglePdf()}
+                  />
             </View>
-          :<></>
-          }
+          ) : (
+            <></>
+          )}
+        </View>
+      ) : (
+       <Text style={{textAlign:"center",fontFamily:"Roboto",fontSize:20}}>No image selected</Text>
+      )}
     </View>
   );
 };

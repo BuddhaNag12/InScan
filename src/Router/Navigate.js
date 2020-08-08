@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 import auth from '@react-native-firebase/auth';
 // Component
-import {SignInTitle, SignUpTitle} from '../components/HeaderTitle';
+import {SignInTitle, SignUpTitle,EditingTitle,MultipleEditingTitle} from '../components/HeaderTitle';
 // import {DropDownButton} from '../screens/drawers/Documents';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -27,7 +27,6 @@ import MyGallery from '../screens/drawers/Gallery';
 import DocumentView from '../screens/drawers/Documents';
 // import ConvertImageToPdf from '../screens/PdfConvert';
 import * as Animatable from 'react-native-animatable';
-
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -75,10 +74,10 @@ export default function App() {
   if (initializing)
     return (
       <Animatable.View
-      animation="fadeInRight"
-      easing={'ease-in'}
+        animation="fadeInRight"
+        easing={'ease-in'}
         style={{
-          flex:1,
+          flex: 1,
           height: windowHeight,
           justifyContent: 'center',
           alignItems: 'center',
@@ -146,9 +145,23 @@ export default function App() {
               options={{headerShown: false}}
             />
             <Stack.Screen name="Preview" component={Preview} />
-            <Stack.Screen name="Convert" component={MultipleImgConvert} />
+            <Stack.Screen name="Convert" component={MultipleImgConvert}
+             options={{
+              headerTitle: (props) => <MultipleEditingTitle {...props} />,
+              headerStyle: {
+                backgroundColor: '#f4511e',
+                opacity: 0.8,
+              },
+            }}
+            />
             <Stack.Screen name="Edited Photos" component={EditedPhotos}
-
+             options={{
+              headerTitle: (props) => <EditingTitle {...props} />,
+              headerStyle: {
+                backgroundColor: '#f4511e',
+                opacity: 0.8,
+              },
+            }}
             />
             <Stack.Screen
               name="Document"
