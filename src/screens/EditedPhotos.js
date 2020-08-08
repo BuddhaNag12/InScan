@@ -9,19 +9,28 @@ import {
   Dimensions,
 } from 'react-native';
 import {Card, Image, Text, Icon, Button} from 'react-native-elements';
+import MyHeader from '../components/header/Header';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNImageToPdf from 'react-native-image-to-pdf';
+import vision from '@react-native-firebase/ml-vision';
+var RNFS = require('react-native-fs');
 const height = Dimensions.get('screen').height;
 
-export default class EditedPhotos extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      EditedPhotos: [],
-    };
-  }
+export default function EditedPhotos ({navigation}) {
 
-  async hasAndroidPermission() {
+  const [EditedPhotos,setEditedPhotos] =React.useState([]);
+  const [loading,setLoading] =React.useState(false);
+ 
+ React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      handleButtonPress();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
+  async function hasAndroidPermission() {
     const permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
     const hasPermission = await PermissionsAndroid.check(permission);
     if (hasPermission) {
@@ -30,9 +39,8 @@ export default class EditedPhotos extends React.Component {
     const status = await PermissionsAndroid.request(permission);
     return status === 'granted';
   }
-
-  componentDidMount() {
-    if (Platform.OS === 'android' && !this.hasAndroidPermission()) {
+  async function handleButtonPress() {
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
       return;
     }
 
@@ -40,23 +48,44 @@ export default class EditedPhotos extends React.Component {
       first: 20,
       assetType: 'Photos',
       groupTypes: 'Album',
-      groupName: 'Inscan_edit',
+      groupName: 'InScan_edit',
     })
       .then((r) => {
-        this.setState({EditedPhotos: r.edges});
+        setEditedPhotos(r.edges);
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  openPreview = (imgPath) => {
-    this.props.navigation.push('Preview', {
+ 
+  const OcrText= async(localPath)=>{
+    setLoading(true)
+    const processed = await vision().textRecognizerProcessImage(localPath);
+    // processed.blocks.forEach(block => {
+    //   console.log('Found block with text: ', block.text);
+    //   console.log('Confidence in block: ', block.confidence);
+    //   console.log('Languages found in block: ', block.recognizedLanguages);
+    // });
+    return processed.text;
+  }
+  const deleteFile = (uri) => {
+    RNFS.unlink(uri)
+      .then(() => {
+        console.log('FILE DELETED');
+      })
+      // `unlink` will throw an error, if the item to unlink does not exist
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+  const openPreview = (imgPath) => {
+    navigation.push('Preview', {
       imgPath: imgPath,
     });
   };
 
-  convertSinglePdf = async (imgPath) => {
+  const convertSinglePdf = async (imgPath) => {
     const NewimgPath = imgPath.substr(7);
     try {
       // convert image to pdf
@@ -73,7 +102,7 @@ export default class EditedPhotos extends React.Component {
         quality: 1.0, // optional compression paramter
       };
       RNImageToPdf.createPDFbyImages(options).then((pdf) => {
-        this.props.navigation.navigate('Document', {
+        navigation.navigate('Document', {
           pdfUri: pdf.filePath,
         });
       });
@@ -81,9 +110,10 @@ export default class EditedPhotos extends React.Component {
       console.log(e);
     }
   };
-  render() {
+
     return (
-      <View>
+      <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+        <MyHeader navigation={navigation} />
         <Text
           style={{textAlign: 'center', fontFamily: 'Ionicons', fontSize: 20}}>
           Images from InScan library
@@ -92,26 +122,25 @@ export default class EditedPhotos extends React.Component {
           <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
             Convert Multiple image click here
           </Text>
-          
+
           <Button
             raised
-            titleStyle={{fontFamily:"Roboto",color:"black"}}
-            containerStyle={{justifyContent:"center",alignItems:"center"}}
-            buttonStyle={{borderRadius:50,backgroundColor:"#FFE4DE"}}
+            titleStyle={{fontFamily: 'Roboto', color: 'black'}}
+            containerStyle={{justifyContent: 'center', alignItems: 'center'}}
+            buttonStyle={{borderRadius: 50, backgroundColor: '#FFE4DE'}}
             title="Multiple image convert"
-            onPress={() => this.props.navigation.navigate('Convert')}
+            onPress={() => navigation.navigate('Convert')}
           />
         </View>
-        <ScrollView horizontal>
-          {this.state.EditedPhotos ? (
-            this.state.EditedPhotos.map((p, i) => {
-              //console.log(this.state.EditedPhotos);
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {EditedPhotos.length>0 ? (
+            EditedPhotos.map((p, i) => {
               return (
                 <Card
                   containerStyle={{borderRadius: 30, height: height - 180}}
                   key={i}>
                   <TouchableOpacity
-                    onPress={() => this.openPreview(p.node.image.uri)}>
+                    onPress={() => openPreview(p.node.image.uri)}>
                     <Image
                       key={i}
                       style={{
@@ -127,24 +156,39 @@ export default class EditedPhotos extends React.Component {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
+                      backgroundColor:"grey",
+                      borderRadius:30,
+                      marginTop:5
                     }}>
                     <Icon
                       raised
-                      onPress={() => this.convertSinglePdf(p.node.image.uri)}
+                      onPress={() => convertSinglePdf(p.node.image.uri)}
                       name="document-attach-outline"
                       type="ionicon"
                       color="#FF5D5D"
                     />
-                    <Icon
-                      raised
-                      onPress={() => console.log('Todo')}
-                      name="pencil"
-                      type="ionicon"
-                      color="#574240"
+                   <Button
+                    loading={loading} 
+                    onPress={() =>OcrText(p.node.image.uri).then((data)=>{
+                      setLoading(false)
+                      navigation.navigate('OcrText',{
+                        text:data
+                      })
+                    })}
+                    buttonStyle={{backgroundColor:"grey"}}
+                    loadingStyle={{padding:20,color:"red"}}
+                   icon={
+                    <Icon   
+                    raised
+                    name="pencil"
+                    type="ionicon"
+                    color="#574240"
                     />
+                   }
+                   />
                     <Icon
                       raised
-                      onPress={() => console.log('Todo')}
+                      onPress={() => deleteFile(p.node.image.uri)}
                       name="trash-outline"
                       type="ionicon"
                       color="#574240"
@@ -172,11 +216,13 @@ export default class EditedPhotos extends React.Component {
           ) : (
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text>No Images Found</Text>
+              <Text style={{textAlign:"center",fontFamily:"Roboto",fontSize:20}}>No Images Found</Text>
             </View>
-          )}
+          )
+          
+          }
         </ScrollView>
       </View>
     );
-  }
+
 }

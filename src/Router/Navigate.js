@@ -16,9 +16,9 @@ import Dashboard from '../screens/Dashboard/Dashboard';
 import Signin from '../screens/Auth/SignIn';
 import Singup from '../screens/Auth/SignUp';
 import Preview from '../screens/Preview';
+import OcrText from '../screens/OcrText';
 import MultipleImgConvert from '../screens/MultipleImgConvert';
 import EditedPhotos from '../screens/EditedPhotos';
-
 //drawers
 import CustomDrawer from '../screens/drawers/drawerLayout/CustumDrawer';
 import HelpScreen from '../screens/drawers/Help';
@@ -52,6 +52,7 @@ function DrawerNavigator() {
       <Drawer.Screen name="Gallery" component={MyGallery} />
       <Drawer.Screen name="Help" component={HelpScreen} />
       <Drawer.Screen name="About" component={AboutScreen} />
+      <Drawer.Screen name="Edited Documents" component={EditedPhotos} />
     </Drawer.Navigator>
   );
 }
@@ -118,6 +119,7 @@ export default function App() {
                 headerTintColor: '#fff',
               }}
             />
+       
           </>
         ) : (
           <>
@@ -145,18 +147,10 @@ export default function App() {
               options={{headerShown: false}}
             />
             <Stack.Screen name="Preview" component={Preview} />
+
             <Stack.Screen name="Convert" component={MultipleImgConvert}
              options={{
               headerTitle: (props) => <MultipleEditingTitle {...props} />,
-              headerStyle: {
-                backgroundColor: '#f4511e',
-                opacity: 0.8,
-              },
-            }}
-            />
-            <Stack.Screen name="Edited Photos" component={EditedPhotos}
-             options={{
-              headerTitle: (props) => <EditingTitle {...props} />,
               headerStyle: {
                 backgroundColor: '#f4511e',
                 opacity: 0.8,
@@ -168,6 +162,7 @@ export default function App() {
               component={DocumentView}
               options={{headerShown: true}}
             />
+            <Stack.Screen name="OcrText" component={OcrText} />
           </>
         )}
       </Stack.Navigator>

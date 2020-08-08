@@ -8,7 +8,7 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
-import {Card, Image, Text, Icon, Button} from 'react-native-elements';
+import {Image, Text, Icon, Button} from 'react-native-elements';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNImageToPdf from 'react-native-image-to-pdf';
 const height = Dimensions.get('screen').height;
@@ -81,7 +81,7 @@ const ImageGrid = ({navigation}) => {
       first: 20,
       assetType: 'Photos',
       groupTypes: 'Album',
-      groupName: 'Inscan_edit',
+      groupName: 'InScan_edit',
     })
       .then((r) => {
         setPhotos(r.edges);

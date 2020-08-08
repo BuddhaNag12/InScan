@@ -20,6 +20,8 @@ target 'InScanner' do
 
   pod 'RNImageToPdf', :path => '../node_modules/react-native-image-to-pdf'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'InScannerTests' do
     inherit! :complete
     # Pods for testing

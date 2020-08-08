@@ -1,4 +1,6 @@
 rootProject.name = 'InScanner'
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
 include ':react-native-image-to-pdf'
 project(':react-native-image-to-pdf').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-to-pdf/android')
 include ':react-native-pdf'

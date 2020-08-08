@@ -6,7 +6,6 @@ import * as Animatable from 'react-native-animatable';
 
 const image = require('../../../assets/phone.png');
 const h1 = 30;
-const h2 = 25;
 const h3 = 20;
 
 export default function Dashboard({navigation}) {

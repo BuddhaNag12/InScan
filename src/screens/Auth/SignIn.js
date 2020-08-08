@@ -161,8 +161,8 @@ export default function Signin({navigation}) {
                 raised
                 name="logo-google"
                 type="ionicon"
-                onPress={async () =>
-                  await onGoogleButtonPress()
+                onPress={ () =>
+                 onGoogleButtonPress()
                     .then(() => {
                       navigation.navigate('Dashboard');
                     })
@@ -178,7 +178,6 @@ export default function Signin({navigation}) {
                 raised
                 name="logo-facebook"
                 type="ionicon"
-                color="blue"
                 size={30}
                 style={{margin: 3}}
               />
