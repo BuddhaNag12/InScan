@@ -24,7 +24,8 @@ import CustomDrawer from '../screens/drawers/drawerLayout/CustumDrawer';
 import HelpScreen from '../screens/drawers/Help';
 import AboutScreen from '../screens/drawers/About';
 import MyGallery from '../screens/drawers/Gallery';
-import DocumentView from '../screens/drawers/Documents';
+import DocumentView from '../screens/drawers/DocumentView';
+import DocumentList from '../screens/drawers/documentList'
 // import ConvertImageToPdf from '../screens/PdfConvert';
 import * as Animatable from 'react-native-animatable';
 
@@ -53,6 +54,7 @@ function DrawerNavigator() {
       <Drawer.Screen name="Help" component={HelpScreen} />
       <Drawer.Screen name="About" component={AboutScreen} />
       <Drawer.Screen name="Edited Documents" component={EditedPhotos} />
+      <Drawer.Screen name="Documents" component={DocumentList} />
     </Drawer.Navigator>
   );
 }
@@ -72,23 +74,14 @@ export default function App() {
     return subscriber;
   }, []);
 
-  if (initializing)
-    return (
-      <Animatable.View
-        animation="fadeInRight"
-        easing={'ease-in'}
-        style={{
-          flex: 1,
-          height: windowHeight,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size="large" color="red" />
-      </Animatable.View>
-    );
+  if(initializing){
+    return(
+      <ActivityIndicator size="large" />
+    )
+  }
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator >
         {!user ? (
           <>
             <Stack.Screen

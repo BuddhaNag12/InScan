@@ -7,6 +7,7 @@ import {
   PermissionsAndroid,
   Platform,
   Dimensions,
+  ToastAndroid
 } from 'react-native';
 import {Card, Image, Text, Icon, Button} from 'react-native-elements';
 import MyHeader from '../components/header/Header';
@@ -69,16 +70,38 @@ export default function EditedPhotos ({navigation}) {
     // });
     return processed.text;
   }
-  const deleteFile = (uri) => {
-    RNFS.unlink(uri)
-      .then(() => {
-        console.log('FILE DELETED');
-      })
-      // `unlink` will throw an error, if the item to unlink does not exist
-      .catch((err) => {
-        console.log(err.message);
-      });
+
+  const showToastWithGravityAndOffset = () => {
+    ToastAndroid.showWithGravityAndOffset(
+      "Deleted",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    );
   };
+  const deletePhoto= async (uri)=>{
+    try{
+      CameraRoll.deletePhotos([uri]).then(()=>{
+        showToastWithGravityAndOffset();
+        CameraRoll.getPhotos({
+          first: 20,
+          assetType: 'Photos',
+          groupTypes: 'Album',
+          groupName: 'InScan_edit',
+        })
+          .then((r) => {
+            setEditedPhotos(r.edges);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+     }
+     catch(e){
+      console.log(e);
+     }
+  }
   const openPreview = (imgPath) => {
     navigation.push('Preview', {
       imgPath: imgPath,
@@ -188,7 +211,7 @@ export default function EditedPhotos ({navigation}) {
                    />
                     <Icon
                       raised
-                      onPress={() => deleteFile(p.node.image.uri)}
+                      onPress={() => deletePhoto(p.node.image.uri)}
                       name="trash-outline"
                       type="ionicon"
                       color="#574240"

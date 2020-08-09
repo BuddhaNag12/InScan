@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   box: {
     borderBottomRightRadius: 75,
     backgroundColor: '#FFE4DE',
-    height: 0.5 * height,
+    height: 0.52 * height,
   },
   bottomBox: {
     flex: 1,
@@ -70,7 +70,6 @@ export default function CustomDrawer(props) {
   }, []);
 
   const signOut = async () => {
-
     auth()
       .signOut()
       .then(() => {
@@ -123,15 +122,21 @@ export default function CustomDrawer(props) {
           />
           <DrawerButtons
             title="Gallery"
-            IconName="align-justify"
+            IconName="images"
             navigation={props.navigation}
             routeTo="Gallery"
           />
           <DrawerButtons
             title="Edited images"
-            IconName="image"
+            IconName="expand"
             navigation={props.navigation}
             routeTo="Edited Documents"
+          />
+          <DrawerButtons
+            title="Documents"
+            IconName="folder-open"
+            navigation={props.navigation}
+            routeTo="Documents"
           />
           <DrawerButtons
             title="Help"
@@ -146,6 +151,7 @@ export default function CustomDrawer(props) {
             routeTo="About"
           />
         </View>
+
         <View style={{...styles.bottomBox}}>
           <View
             style={{

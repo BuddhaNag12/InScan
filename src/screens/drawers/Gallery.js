@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions,
   TouchableOpacity,
+  ToastAndroid
 } from 'react-native';
 import {Card, Image, Text, Icon} from 'react-native-elements';
 import MyHeader from '../../components/header/Header';
@@ -49,21 +50,40 @@ const MyGallery = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       handleButtonPress();
     });
-
     return unsubscribe;
   }, [navigation]);
 
+  const showToastWithGravityAndOffset = () => {
+    ToastAndroid.showWithGravityAndOffset(
+      "Deleted",
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    );
+  };
 
   const deletePhoto= async (uri)=>{
     try{
-     const isDeleted= await RNFS.unlink(uri)
-      return isDeleted;
-     }  
+      CameraRoll.deletePhotos([uri]).then(()=>{
+        showToastWithGravityAndOffset();
+        CameraRoll.getPhotos({
+          first: 20,
+          assetType: 'Photos',
+          groupTypes: 'Album',
+          groupName: 'InScan',
+        })
+          .then((r) => {
+            setPhotos(r.edges);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+     }
      catch(e){
       console.log(e);
-      return e;
      }
-     return isDeleted;
   }
 
   async function handleButtonPress() {
@@ -156,8 +176,7 @@ const MyGallery = ({navigation}) => {
                   />
                   <Icon
                     raised
-                    onPress={() => deletePhoto(p.node.image.uri).then((data)=>{console.log(data)}).
-                      catch((e)=>console.log(e))}
+                    onPress={() => deletePhoto(p.node.image.uri)}
                     name="trash-outline"
                     type="ionicon"
                     color="#574240"

@@ -4,6 +4,7 @@ import {Button} from 'react-native-elements';
 
 import Pdf from 'react-native-pdf';
 import Share from 'react-native-share';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function DocumentView({route}) {
   const {pdfUri} = route.params;
@@ -28,8 +29,14 @@ export default function DocumentView({route}) {
           <Button
             title="Share this pdf"
             onPress={() => shareFile()}
+            icon={
+              <Icon
+              name="file-pdf"
+              size={20}
+              />
+            }
             buttonStyle={{
-              backgroundColor: '#fefefe',
+              backgroundColor: "transparent"
             }}
             titleStyle={{color: 'black', fontFamily: 'Roboto'}}
           />
