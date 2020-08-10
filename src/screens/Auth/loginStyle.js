@@ -10,10 +10,10 @@ export default StyleSheet.create({
   },
   HeadingText: {
     fontFamily: 'Roboto_medium',
-    fontWeight: 'normal',
     fontSize: 50,
-    color: 'white',
+    color: '#FF8066',
     textAlign: 'center',
+    textTransform:"uppercase"
   },
   button: {
     borderRadius: 30,

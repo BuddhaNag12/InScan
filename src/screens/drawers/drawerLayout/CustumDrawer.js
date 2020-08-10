@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import {Avatar, Button} from 'react-native-elements';
+import {View, Text, StyleSheet, Dimensions,ToastAndroid} from 'react-native';
+import {Avatar, Button, Divider} from 'react-native-elements';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import DrawerButtons from '../../../components/DrawerButtons';
+import Share from 'react-native-share';
 const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   Button: {
     borderRadius: 30,
     backgroundColor: 'transparent',
     width: 100,
+  },
+  shareButton: {
+    backgroundColor: 'transparent',
+    width: '100%',
   },
   icon: {
     padding: 4,
@@ -19,17 +24,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Ionicons',
     fontSize: 20,
     fontWeight: 'normal',
+    color: 'white',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#EAFFFE',
-    margin: null,
   },
   box: {
-    borderBottomRightRadius: 75,
+    borderBottomRightRadius: 100,
     backgroundColor: '#FFE4DE',
-    height: 0.52 * height,
+    height: 0.6 * height,
+    position: 'relative',
   },
   bottomBox: {
     flex: 1,
@@ -37,8 +43,14 @@ const styles = StyleSheet.create({
   profile: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fefefe',
-    padding: 20,
+    backgroundColor: '#F99D9F',
+    top: 20,
+    padding: 10,
+    height: 50,
+    width: 250,
+    alignSelf: 'center',
+    borderRadius: 30,
+    margin: 5,
   },
   HeadContainer: {
     backgroundColor: '#FFE4DE',
@@ -77,11 +89,43 @@ export default function CustomDrawer(props) {
       });
   };
 
+  const shareFile = () => {
+    const shareOptions = {
+      title: 'Share via',
+      url: `https://play.google.com/store/apps/details?id=com.inscanner&hl=en_IN`,
+    };
+    Share.open(shareOptions)
+      .then((res) => {
+        console.log('shared ', res);
+        const isCancelled=false;
+        showToastWithGravityAndOffset(isCancelled);
+      })
+      .catch((e) => {
+        const isCancelled=true;
+        showToastWithGravityAndOffset(isCancelled);
+        console.log(e);
+      });
+  };
+
+  const showToastWithGravityAndOffset = (isCancelled) => {
+    let cancelled;
+    isCancelled ? cancelled="Cancelled" : cancelled="Thanks" 
+    ToastAndroid.showWithGravityAndOffset(
+      cancelled,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50,
+    );
+  };
+
+
+
   if (initializing) return null;
   return (
     <DrawerContentScrollView {...props}>
       <View style={{...styles.container}}>
-        <View style={{...styles.profile}}>
+        <View style={{...styles.profile, elevation: 2}}>
           {photoURL ? (
             <Avatar rounded source={{uri: photoURL}} />
           ) : (
@@ -114,42 +158,73 @@ export default function CustomDrawer(props) {
           style={{
             ...styles.box,
           }}>
-          <DrawerButtons
-            title="Home"
-            IconName="home"
-            navigation={props.navigation}
-            routeTo="Dashboard"
-          />
-          <DrawerButtons
-            title="Gallery"
-            IconName="images"
-            navigation={props.navigation}
-            routeTo="Gallery"
-          />
-          <DrawerButtons
-            title="Edited images"
-            IconName="expand"
-            navigation={props.navigation}
-            routeTo="Edited Documents"
-          />
-          <DrawerButtons
-            title="Documents"
-            IconName="folder-open"
-            navigation={props.navigation}
-            routeTo="Documents"
-          />
-          <DrawerButtons
-            title="Help"
-            IconName="question"
-            navigation={props.navigation}
-            routeTo="Help"
-          />
-          <DrawerButtons
-            title="About"
-            IconName="info"
-            navigation={props.navigation}
-            routeTo="About"
-          />
+          <View
+            style={{
+              backfaceVisibility: 'red',
+              height: height / 2,
+              marginTop: 30,
+            }}>
+            <DrawerButtons
+              title="Home"
+              IconName="home"
+              navigation={props.navigation}
+              routeTo="Dashboard"
+            />
+            <DrawerButtons
+              title="Gallery"
+              IconName="images"
+              navigation={props.navigation}
+              routeTo="Gallery"
+            />
+            <DrawerButtons
+              title="Edited images"
+              IconName="expand"
+              navigation={props.navigation}
+              routeTo="Edited Documents"
+            />
+            <DrawerButtons
+              title="Documents"
+              IconName="folder-open"
+              navigation={props.navigation}
+              routeTo="Documents"
+            />
+            <DrawerButtons
+              title="Help"
+              IconName="question"
+              navigation={props.navigation}
+              routeTo="Help"
+            />
+
+            <Divider style={{backgroundColor: 'black'}} />
+            <DrawerButtons
+              title="About us"
+              IconName="info"
+              navigation={props.navigation}
+              routeTo="About"
+            />
+            <Button
+              onPress={() => shareFile()}
+              title="Share this app"
+              icon={
+                <Icon
+                  name="share"
+                  type="ionicon"
+                  color="rgba(200,0,0,0.5)"
+                  style={{padding: 2}}
+                />
+              }
+              buttonStyle={{
+                backgroundColor: 'transparent',
+                justifyContent: 'flex-start',
+              }}
+              titleStyle={{
+                fontFamily: 'Roboto',
+                color: 'black',
+                textAlign: 'center',
+                paddingHorizontal: 15,
+              }}
+            />
+          </View>
         </View>
 
         <View style={{...styles.bottomBox}}>

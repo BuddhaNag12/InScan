@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {Button, Text, Input, Icon} from 'react-native-elements';
+import React, {useState} from 'react';
+import {Button, Text, Input, SocialIcon, Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import loginStyle from './loginStyle';
-
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 
 export default function Signin({navigation}) {
@@ -93,7 +92,7 @@ export default function Signin({navigation}) {
     <View style={loginStyle.container}>
       <ScrollView>
         <View style={{...loginStyle.box1}}>
-          <Text style={loginStyle.HeadingText}>InScan</Text>
+          <Text style={loginStyle.HeadingText}>Sign In</Text>
           <View style={loginStyle.LoginForm}>
             <Input
               inputContainerStyle={{
@@ -102,6 +101,15 @@ export default function Signin({navigation}) {
                 borderRadius: 60,
                 padding: 10,
                 backgroundColor: '#fefefe',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.2,
+                shadowRadius: 1.41,
+
+                elevation: 2,
               }}
               leftIcon={
                 <Icon name="mail" type="ionicon" size={20} color="#FC8686" />
@@ -119,6 +127,15 @@ export default function Signin({navigation}) {
                 borderRadius: 60,
                 padding: 10,
                 backgroundColor: '#fefefe',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.2,
+                shadowRadius: 1.41,
+
+                elevation: 2,
               }}
               secureTextEntry={passVisible}
               ref={inputField}
@@ -157,12 +174,11 @@ export default function Signin({navigation}) {
                 flexDirection: 'row',
                 justifyContent: 'center',
               }}>
-              <Icon
+              <SocialIcon
                 raised
-                name="logo-google"
-                type="ionicon"
-                onPress={ () =>
-                 onGoogleButtonPress()
+                type="google"
+                onPress={() =>
+                  onGoogleButtonPress()
                     .then(() => {
                       navigation.navigate('Dashboard');
                     })
@@ -170,17 +186,9 @@ export default function Signin({navigation}) {
                       console.log(error);
                     })
                 }
-                color="red"
-                size={30}
-                style={{margin: 3}}
               />
-              <Icon
-                raised
-                name="logo-facebook"
-                type="ionicon"
-                size={30}
-                style={{margin: 3}}
-              />
+
+              <SocialIcon raised type="facebook" />
             </View>
             <Text
               style={{
@@ -195,7 +203,7 @@ export default function Signin({navigation}) {
                 style={{
                   textAlign: 'center',
                   fontFamily: 'Roboto',
-                  fontSize: 15,
+                  fontSize: 18,
                 }}>
                 Create A new Account
               </Text>

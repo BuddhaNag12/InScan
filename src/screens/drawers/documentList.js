@@ -52,7 +52,6 @@ const DocumentList = ({navigation}) => {
 
   const IsDocs = () => {
     if (data.length > 0) {
-      console.log(data);
       return (
         <Text
           style={{
@@ -60,7 +59,8 @@ const DocumentList = ({navigation}) => {
             fontFamily: 'Roboto',
             textTransform: 'capitalize',
           }}>
-          docs
+          Documents
+
         </Text>
       );
     } else {

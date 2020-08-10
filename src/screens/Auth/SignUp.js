@@ -134,7 +134,7 @@ export default function Signup({navigation}) {
                 style={{
                   textAlign: 'center',
                   fontFamily: 'Roboto',
-                  fontSize: 15,
+                  fontSize: 18,
                 }}>
                 Log in
               </Text>

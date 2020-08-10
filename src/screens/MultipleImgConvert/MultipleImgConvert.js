@@ -7,6 +7,7 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
+  ActivityIndicator
 } from 'react-native';
 import {Image, Text, Icon, Button} from 'react-native-elements';
 import CameraRoll from '@react-native-community/cameraroll';
@@ -24,6 +25,8 @@ const ImageGrid = ({navigation}) => {
   const [photos, setPhotos] = React.useState([]);
   const [imgUri, selectedImageUri] = React.useState([]);
   const [sel, setSel] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
   const hasAndroidPermission = async () => {
     const permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
     const hasPermission = await PermissionsAndroid.check(permission);
@@ -76,7 +79,7 @@ const ImageGrid = ({navigation}) => {
     if (Platform.OS === 'android' && !hasAndroidPermission()) {
       return;
     }
-
+    setLoading(true);
     CameraRoll.getPhotos({
       first: 20,
       assetType: 'Photos',
@@ -84,9 +87,11 @@ const ImageGrid = ({navigation}) => {
       groupName: 'InScan_edit',
     })
       .then((r) => {
+        setLoading(false);
         setPhotos(r.edges);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, []);
@@ -95,7 +100,13 @@ const ImageGrid = ({navigation}) => {
     setSel(true);
     selectedImageUri((imgUri) => [...imgUri, uri]);
   };
-
+  if (loading) {
+    return (
+      <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+        <ActivityIndicator size="large" color="red" />
+      </View>
+    )
+  }
   return (
     <View style={{...styles.container}}>
       <View>

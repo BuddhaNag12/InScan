@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   StatusBar,
   ToastAndroid,
+  PermissionsAndroid,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {RNCamera} from 'react-native-camera';
@@ -26,22 +27,46 @@ export default function Camera({navigation}) {
   // Local path to file on the device
   let CameraRef = useRef(null);
 
+  async function hasAndroidPermission() {
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+  }
+
   const takePicture = async () => {
-    const options = {quality: 0.5, base64: true};
-    const data = await CameraRef.current.takePictureAsync(options);
-    CameraRoll.save(data.uri, {type: 'photo', album: 'InScan'}).then(()=>{
-      showToastWithGravityAndOffset();
-    }).catch(e=>{console.log(e)})
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
+      return;
+    }
+    try {
+      const options = {quality: 0.5, base64: true};
+      const data = await CameraRef.current.takePictureAsync(options);
+      CameraRoll.save(data.uri, {type: 'photo', album: 'InScan'})
+        .then(() => {
+          showToastWithGravityAndOffset();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
+
   const showToastWithGravityAndOffset = () => {
-        ToastAndroid.showWithGravityAndOffset(
-          "Captured",
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-          25,
-          50
-        );
-      };
+    ToastAndroid.showWithGravityAndOffset(
+      'Captured',
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50,
+    );
+  };
   const toggleFlash = () => {
     if (flash == RNCamera.Constants.FlashMode.on) {
       setFlash(RNCamera.Constants.FlashMode.off);
@@ -140,14 +165,14 @@ export default function Camera({navigation}) {
                 <Icon
                   name="images-outline"
                   type="ionicon"
-                  size={30}
+                  size={40}
                   color="white"
                   onPress={() => navigation.navigate('Gallery')}
                 />
                 <Icon
                   name="camera-outline"
                   type="ionicon"
-                  size={30}
+                  size={40}
                   color="white"
                   onPress={() => takePicture()}
                 />
@@ -157,7 +182,7 @@ export default function Camera({navigation}) {
                       ? 'flash-outline'
                       : 'flash-off-outline'
                   }
-                  size={30}
+                  size={40}
                   type="ionicon"
                   color="white"
                   onPress={() => toggleFlash()}
@@ -165,7 +190,7 @@ export default function Camera({navigation}) {
                 <Icon
                   name="image-outline"
                   type="ionicon"
-                  size={30}
+                  size={40}
                   color="white"
                   onPress={() => openImagePicker()}
                 />
