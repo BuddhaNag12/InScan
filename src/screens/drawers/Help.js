@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent:"center",
-    alignItems:"center",
+    padding: 2,
   },
   backgroundImage: {
     resizeMode: 'cover',
@@ -32,41 +31,44 @@ const styles = StyleSheet.create({
     right: 2,
   },
   headingText: {
-    marginVertical:4,
-    height:40,
-    width: width-40,
+    justifyContent:"center",
+    alignItems:"center",
+    marginVertical: 4,
+    height: 40,
+    width: width /2,
     elevation: 3,
-    backgroundColor:"#FF8066",
-    borderRadius:20,
-    padding:2,
+    backgroundColor: '#FF8066',
+    borderRadius: 20,
+    padding: 2,
   },
   h1: {
     textAlign: 'left',
     fontFamily: 'Roboto',
-    fontSize:30,
-    color:"#fefefe",
-    paddingVertical:4,
-    paddingHorizontal:4,
+    fontSize: 30,
+    color: '#fefefe',
+    paddingVertical: 4,
+    paddingHorizontal: 4,
   },
-  info:{
+  info: {
     textAlign: 'left',
     fontFamily: 'Roboto',
-    fontSize:20,
+    fontSize: 20,
+    textTransform: 'capitalize',
+  },
+  helpArea: {
+    marginVertical: 4,
+    height: height - 300,
+    width: width - 40,
+  },
+  h2: {
     textTransform:"capitalize",
-  },
-  helpArea:{
-    marginVertical:4,
-    height:height-300,
-    width: width-40,
-  },
-  h2:{
     textAlign: 'left',
     fontFamily: 'Roboto',
-    fontSize:20,
-    color:"#fefefe",
-    paddingVertical:4,
-    paddingHorizontal:4,
-  }
+    fontSize: 20,
+    color: '#fefefe',
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
 });
 const Images = require('../../../assets/help.png');
 export default function HelpScreen({navigation}) {
@@ -87,27 +89,47 @@ export default function HelpScreen({navigation}) {
           <View style={{...styles.headingText}}>
             <Text style={{...styles.h1}}>Steps:</Text>
           </View>
-           <View style={{...styles.helpArea}}>
-           <Text style={{...styles.info}}> * Open Camera click photo</Text>
-           <Text style={{...styles.info}}> * Navigate to Gallery</Text>
-           <Text style={{...styles.info}}> * Edit images into proper document size</Text>
-           <Text style={{...styles.info}}> * Navigate to edited images</Text>
-           <Text style={{...styles.info}}> * Click on convert pdf to convert single pdf</Text>   
-          <View style={{...styles.headingText}}>
-           <Text style={{...styles.h2}}>To convert multiple image into pdf : </Text>
-            </View>
-           <Text style={{...styles.info}}> * Navigate to Edited Images</Text>
-           <Text style={{...styles.info}}> * click on multiple image convert</Text>
-           <Text style={{...styles.info}}> * hold each image to select multiple image</Text>
-           <Text style={{...styles.info}}> * click pdf icon</Text>
-           <Text style={{...styles.info}}> * to reset click reset button</Text>
+          <View style={{...styles.helpArea}}>
+            <Text style={{...styles.info}}> * Open Camera click photo</Text>
+            <Text style={{...styles.info}}> * Navigate to Gallery</Text>
+            <Text style={{...styles.info}}>
+              {' '}
+              * Edit images into proper document size
+            </Text>
+            <Text style={{...styles.info}}> * Navigate to edited images</Text>
+            <Text style={{...styles.info}}>
+              {' '}
+              * Click on convert pdf to convert single pdf
+            </Text>
             <View style={{...styles.headingText}}>
-             <Text style={{...styles.h2}}>Documents section </Text>
+              <Text style={{...styles.h2}}>
+                  multiple image into pdf :{' '}
+              </Text>
+            </View>
+            <Text style={{...styles.info}}> * Navigate to Edited Images</Text>
+            <Text style={{...styles.info}}>
+              {' '}
+              * click on multiple image convert
+            </Text>
+            <Text style={{...styles.info}}>
+              {' '}
+              * hold each image to select multiple image
+            </Text>
+            <Text style={{...styles.info}}> * click pdf icon</Text>
+            <Text style={{...styles.info}}> * to reset click reset button</Text>
+            <View style={{...styles.headingText}}>
+              <Text style={{...styles.h2}}>Documents section </Text>
             </View>
             <Text style={{...styles.info}}> * navigation document section</Text>
-           <Text style={{...styles.info}}> * click on perticular pdf file to view the pdf </Text>
-           <Text style={{...styles.info}}> * hold perticular pdf file to delete the pdf</Text>
-           </View>
+            <Text style={{...styles.info}}>
+              {' '}
+              * click on perticular pdf file to view the pdf{' '}
+            </Text>
+            <Text style={{...styles.info}}>
+              {' '}
+              * hold perticular pdf file to delete the pdf
+            </Text>
+          </View>
         </View>
       </View>
     </ScrollView>

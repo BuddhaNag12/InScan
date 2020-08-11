@@ -13,7 +13,6 @@ import {Button, Image, Text, Icon} from 'react-native-elements';
 import MyHeader from '../../components/header/Header';
 import CameraRoll from '@react-native-community/cameraroll';
 import ImagePicker from 'react-native-image-crop-picker';
-var RNFS = require('react-native-fs');
 
 const height = Dimensions.get('window').height;
 
@@ -163,13 +162,13 @@ const MyGallery = ({navigation}) => {
       {photos.length > 0 ? (
         <FlatList
           data={photos}
-          numColumns={3}
+          numColumns={2}
           keyExtractor={(_, index) => index}
           renderItem={({item, index}) => (
             <View
               keyExtractor={(_, index) => index.toString()}
               style={{
-                padding: 10,
+                paddingHorizontal:10,
                 justifyContent: 'space-between',
               }}>
               <TouchableOpacity
@@ -178,8 +177,8 @@ const MyGallery = ({navigation}) => {
                   source={{uri: item.node.image.uri}} // Use item to set the image source
                   key={index} // Important to set a key for list items
                   style={{
-                    width: 100,
-                    height: 100,
+                    width: 150,
+                    height: 150,
                     borderWidth: 3,
                     borderColor: 'white',
                     resizeMode: 'contain',
@@ -225,7 +224,4 @@ const MyGallery = ({navigation}) => {
   );
 };
 
-{
-  /*  */
-}
 export default MyGallery;

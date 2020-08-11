@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StatusBar,
   StyleSheet,
   View,
   Text,
@@ -9,7 +8,7 @@ import {
   ScrollView,
   Linking,
 } from 'react-native';
-import {Avatar} from 'react-native-elements';
+import {Avatar, Icon} from 'react-native-elements';
 
 import MyHeader from '../../components/header/Header';
 
@@ -31,15 +30,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   backgroundImage: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     height: height - 300,
     width: width,
     right: 2,
   },
-  headingText: {
+  headingWrapper: {
     marginVertical: 4,
     height: 40,
-    width: width - 100,
+    width: width / 2,
     elevation: 2,
     backgroundColor: '#FF8066',
     borderRadius: 20,
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
   },
   h2: {
     textTransform: 'capitalize',
-    textAlign: 'left',
+    textAlign: 'center',
     fontFamily: 'Roboto',
     fontWeight: '100',
     fontSize: 20,
@@ -93,14 +92,35 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   summery: {
-    height: 80,
+    height: height/6,
+  },
+  summeryWrap: {
+    flex: 1,
+  },
+  summeryText: {
+    textTransform: 'capitalize',
+    textAlign: 'left',
+    fontFamily: 'Roboto',
+    fontWeight: '100',
+    fontSize: 18,
+    color: 'black',
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
+  rowArea: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#ffee',
+    width: width / 2 + 40,
+    elevation: 3,
+    borderRadius: 30,
   },
 });
 const Images = require('../../../assets/about.png');
 export default function AboutScreen({navigation}) {
   return (
     <ScrollView>
-      <StatusBar backgroundColor="#dc143c" barStyle="light-content" />
       <MyHeader navigation={navigation} />
       <View style={{...styles.container}}>
         <View style={{...styles.headingImg}}>
@@ -112,7 +132,7 @@ export default function AboutScreen({navigation}) {
           />
         </View>
         <View style={{...styles.content}}>
-          <View style={{...styles.headingText}}>
+          <View style={{...styles.headingWrapper}}>
             <Text style={{...styles.h3}}>About The Developer</Text>
           </View>
           <View style={{...styles.aboutWrapper}}>
@@ -131,28 +151,60 @@ export default function AboutScreen({navigation}) {
               Buddha Nag
             </Text>
           </View>
-          <Text style={{...styles.h1}}>Summery :</Text>
-          <View style={{...styles.summery}}>
-            <Text style={{...styles.h2}}>
-              Hi...! I'm a full stack software developer{' '}
-            </Text>
-            <Text style={{...styles.h2}}>
-              working on simultaneous project on react native and vuejs
-            </Text>
-          </View>
-          <Text style={{...styles.h1}}>Contact :</Text>
-          <View>
-            <Text style={{...styles.h2}}>Phone No. 8486436218</Text>
-            <Text
-              style={{
-                ...styles.h2,
-                backgroundColor: 'white',
-                elevation: 2,
-                borderRadius: 30,
-              }}
-              onPress={() => Linking.openURL(`mailto:rahulnag514@gmail.com`)}>
-              Email : rahulnag514@gmail.com
-            </Text>
+          <View style={{...styles.summeryWrap}}>
+            <Text style={{...styles.h1}}>Quick Summary :</Text>
+            <View style={{...styles.summery}}>
+              <Text style={{...styles.summeryText}}>
+                Hi...! I'm a full stack web developer and software developer{' '}
+              </Text>
+              <Text style={{...styles.summeryText}}>
+                working on simultaneous projects on react native and vuejs
+              </Text>
+              <Text style={{...styles.summeryText}}>
+                Working under Krypto developers pvt ltd.
+              </Text>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <Text
+                style={{
+                  ...styles.h1,
+                }}>
+                Contact details:
+              </Text>
+              <Text style={{...styles.summeryText}}>Email me at:</Text>
+              <View
+                style={{
+                  ...styles.rowArea,
+                }}>
+                <Icon
+                  name="paper-plane"
+                  type="font-awesome-5"
+                  color="#517fa4"
+                  size={15}
+                />
+                <Text
+                  style={{
+                    ...styles.summeryText,
+                  }}
+                  onPress={() =>
+                    Linking.openURL(`mailto:rahulnag514@gmail.com`)
+                  }>
+                  Email : rahulnag514@gmail.com
+                </Text>
+              </View>
+              <View style={{marginVertical: 4}}>
+                <Text style={{...styles.summeryText}}>Fork me at github :</Text>
+                <Icon
+                  raised
+                  name="github"
+                  type="font-awesome-5"
+                  size={20}
+                  onPress={() =>
+                    Linking.openURL(`https://github.com/BuddhaNag12`)
+                  }
+                />
+              </View>
+            </View>
           </View>
         </View>
       </View>

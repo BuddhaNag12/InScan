@@ -11,17 +11,12 @@ const MyHeader = ({navigation}) => {
         containerStyle={{
           borderBottomColor: 'transparent',
           elevation: 5,
-          backgroundColor: '#F46049',
-          opacity: 0.8,
+          backgroundColor: '#FF7772',
+          opacity: 1,
         }}
         leftComponent={
-          <TouchableOpacity>
-            <Icon
-              style={{color: '#fff'}}
-              size={22}
-              name="bars"
-              onPress={() => navigation.toggleDrawer()}
-            />
+          <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+            <Icon style={{color: '#fff'}} size={25} name="bars" />
           </TouchableOpacity>
         }
         centerComponent={

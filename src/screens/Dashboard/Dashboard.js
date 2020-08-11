@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon} from 'react-native-elements';
-import {View, StyleSheet, Image, Text,PermissionsAndroid} from 'react-native';
+import {View, StyleSheet, Image, Text} from 'react-native';
 import MyHeader from '../../components/header/Header';
 import * as Animatable from 'react-native-animatable';
 
@@ -9,23 +9,6 @@ const h1 = 30;
 const h3 = 20;
 
 export default function Dashboard({navigation}) {
-
-  React.useEffect(()=>{
-    hasAndroidPermission();
-  },[])
-
-  async function hasAndroidPermission() {
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-
-    const hasPermission = await PermissionsAndroid.check(permission);
-    if (hasPermission) {
-      return true;
-    }
-
-    const status = await PermissionsAndroid.request(permission);
-    return status === 'granted';
-  }
-
   return (
     <View style={styles.container}>
       <MyHeader navigation={navigation} />
