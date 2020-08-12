@@ -12,6 +12,14 @@
 <!-- Include this only if you are planning to use the microphone for video recording -->
 <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
+<supports-screens 
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:anyDensity="true"
+        />
+        
     <application
      android:requestLegacyExternalStorage="true"
       android:hardwareAccelerated="true"

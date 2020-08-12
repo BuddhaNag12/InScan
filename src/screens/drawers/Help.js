@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import MyHeader from '../../components/header/Header';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -31,24 +31,15 @@ const styles = StyleSheet.create({
     right: 2,
   },
   headingText: {
-    justifyContent:"center",
-    alignItems:"center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 4,
-    height: 40,
-    width: width /2,
     elevation: 3,
     backgroundColor: '#FF8066',
     borderRadius: 20,
     padding: 2,
   },
-  h1: {
-    textAlign: 'left',
-    fontFamily: 'Roboto',
-    fontSize: 30,
-    color: '#fefefe',
-    paddingVertical: 4,
-    paddingHorizontal: 4,
-  },
+
   info: {
     textAlign: 'left',
     fontFamily: 'Roboto',
@@ -57,11 +48,9 @@ const styles = StyleSheet.create({
   },
   helpArea: {
     marginVertical: 4,
-    height: height - 300,
-    width: width - 40,
   },
   h2: {
-    textTransform:"capitalize",
+    textTransform: 'capitalize',
     textAlign: 'left',
     fontFamily: 'Roboto',
     fontSize: 20,
@@ -71,65 +60,74 @@ const styles = StyleSheet.create({
   },
 });
 const Images = require('../../../assets/help.png');
+
+const HeadingImg = () => {
+  return (
+    <View style={{...styles.headingImg}}>
+      <ImageBackground
+        source={Images}
+        style={{
+          ...styles.backgroundImage,
+        }}
+      />
+    </View>
+  );
+};
+
+const ContextView = () => {
+  return (
+    <View>
+      <View style={{...styles.headingText}}>
+        <Text style={{...styles.h2}}>Steps:</Text>
+      </View>
+      <View style={{...styles.helpArea}}>
+        <Text style={{...styles.info}}> * Open Camera click photo</Text>
+        <Text style={{...styles.info}}> * Navigate to Gallery</Text>
+        <Text style={{...styles.info}}>
+          {' '}
+          * Edit images into proper document size
+        </Text>
+        <Text style={{...styles.info}}> * Navigate to edited images</Text>
+        <Text style={{...styles.info}}>
+          {' '}
+          * Click on convert pdf to convert single pdf
+        </Text>
+        <View style={{...styles.headingText}}>
+          <Text style={{...styles.h2}}>multiple image into pdf : </Text>
+        </View>
+        <Text style={{...styles.info}}> * Navigate to Edited Images</Text>
+        <Text style={{...styles.info}}> * click on multiple image convert</Text>
+        <Text style={{...styles.info}}>
+          {' '}
+          * hold each image to select multiple image
+        </Text>
+        <Text style={{...styles.info}}> * click pdf icon</Text>
+        <Text style={{...styles.info}}> * to reset click reset button</Text>
+        <View style={{...styles.headingText}}>
+          <Text style={{...styles.h2}}>Documents section </Text>
+        </View>
+        <Text style={{...styles.info}}> * navigation document section</Text>
+        <Text style={{...styles.info}}>
+          {' '}
+          * click on perticular pdf file to view the pdf{' '}
+        </Text>
+        <Text style={{...styles.info}}>
+          {' '}
+          * hold perticular pdf file to delete the pdf
+        </Text>
+      </View>
+    </View>
+  );
+};
+
 export default function HelpScreen({navigation}) {
   return (
     <ScrollView>
-      <StatusBar backgroundColor="#dc143c" barStyle="light-content" />
       <MyHeader navigation={navigation} />
       <View style={{...styles.container}}>
-        <View style={{...styles.headingImg}}>
-          <ImageBackground
-            source={Images}
-            style={{
-              ...styles.backgroundImage,
-            }}
-          />
-        </View>
+        <HeadingImg />
         <View style={{...styles.content}}>
-          <View style={{...styles.headingText}}>
-            <Text style={{...styles.h1}}>Steps:</Text>
-          </View>
-          <View style={{...styles.helpArea}}>
-            <Text style={{...styles.info}}> * Open Camera click photo</Text>
-            <Text style={{...styles.info}}> * Navigate to Gallery</Text>
-            <Text style={{...styles.info}}>
-              {' '}
-              * Edit images into proper document size
-            </Text>
-            <Text style={{...styles.info}}> * Navigate to edited images</Text>
-            <Text style={{...styles.info}}>
-              {' '}
-              * Click on convert pdf to convert single pdf
-            </Text>
-            <View style={{...styles.headingText}}>
-              <Text style={{...styles.h2}}>
-                  multiple image into pdf :{' '}
-              </Text>
-            </View>
-            <Text style={{...styles.info}}> * Navigate to Edited Images</Text>
-            <Text style={{...styles.info}}>
-              {' '}
-              * click on multiple image convert
-            </Text>
-            <Text style={{...styles.info}}>
-              {' '}
-              * hold each image to select multiple image
-            </Text>
-            <Text style={{...styles.info}}> * click pdf icon</Text>
-            <Text style={{...styles.info}}> * to reset click reset button</Text>
-            <View style={{...styles.headingText}}>
-              <Text style={{...styles.h2}}>Documents section </Text>
-            </View>
-            <Text style={{...styles.info}}> * navigation document section</Text>
-            <Text style={{...styles.info}}>
-              {' '}
-              * click on perticular pdf file to view the pdf{' '}
-            </Text>
-            <Text style={{...styles.info}}>
-              {' '}
-              * hold perticular pdf file to delete the pdf
-            </Text>
-          </View>
+          <ContextView />
         </View>
       </View>
     </ScrollView>

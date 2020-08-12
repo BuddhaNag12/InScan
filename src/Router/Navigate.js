@@ -145,7 +145,13 @@ export default function App({navigation}) {
               component={DocumentView}
               options={{headerShown: true}}
             />
-            <Stack.Screen name="OcrText" component={OcrText} />
+            <Stack.Screen name="OCR TEXT" component={OcrText}
+            options={
+             {
+               headerTitle:"OCR TEXT"
+             }
+            }
+            />
           </>
         )}
       </Stack.Navigator>

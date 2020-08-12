@@ -19,6 +19,7 @@ const height = Dimensions.get('screen').height;
 export default function EditedPhotos({navigation}) {
   const [EditedPhotos, setEditedPhotos] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [Buttonloading, setLoadingBtn] = React.useState(false);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -61,13 +62,36 @@ export default function EditedPhotos({navigation}) {
   }
 
   const OcrText = async (localPath) => {
-    setLoading(true);
+    setLoadingBtn(true);
     const processed = await vision().textRecognizerProcessImage(localPath);
-    // processed.blocks.forEach(block => {
-    //   console.log('Found block with text: ', block.text);
-    //   console.log('Confidence in block: ', block.confidence);
-    //   console.log('Languages found in block: ', block.recognizedLanguages);
-    // });
+    let textIsFound;
+    processed.blocks.forEach((block) => {
+      // console.log('Found block with text: ', block.text);
+      // console.log('Confidence in block: ', block.confidence);
+      if (block.text) {
+        textIsFound = true;
+      } else {
+        textIsFound = false;
+      }
+      //console.log('Languages found in block: ', block.recognizedLanguages);
+    });
+    if (!textIsFound) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Text Not Found',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    } else {
+      ToastAndroid.showWithGravityAndOffset(
+        'Text Found',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    }
     return processed.text;
   };
 
@@ -81,8 +105,8 @@ export default function EditedPhotos({navigation}) {
     );
   };
   const deletePhoto = async (uri) => {
-    try {
-      CameraRoll.deletePhotos([uri]).then(() => {
+    CameraRoll.deletePhotos([uri])
+      .then(() => {
         showToastWithGravityAndOffset();
         CameraRoll.getPhotos({
           first: 20,
@@ -96,10 +120,18 @@ export default function EditedPhotos({navigation}) {
           .catch((err) => {
             console.log(err);
           });
+      })
+      .catch((e) => {
+        if (e == 'Error: Could not delete all media, only deleted 0 photos.') {
+          ToastAndroid.showWithGravityAndOffset(
+            'Deleted Every photos',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
       });
-    } catch (e) {
-      console.log(e);
-    }
   };
   const openPreview = (imgPath) => {
     navigation.push('Preview', {
@@ -135,16 +167,16 @@ export default function EditedPhotos({navigation}) {
 
   if (loading) {
     return (
-      <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size="large" color="red" />
       </View>
-    )
+    );
   }
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <MyHeader navigation={navigation} />
-      <Text style={{textAlign: 'center', fontFamily: 'Ionicons', fontSize: 20}}>
+      <Text style={{textAlign: 'center', fontFamily: 'Roboto', fontSize: 20}}>
         Images from InScan library
       </Text>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -153,8 +185,7 @@ export default function EditedPhotos({navigation}) {
         </Text>
 
         <Button
-          raised
-          titleStyle={{fontFamily: 'Roboto', color: 'black'}}
+          titleStyle={{fontFamily: 'Roboto', color: '#564147'}}
           containerStyle={{justifyContent: 'center', alignItems: 'center'}}
           buttonStyle={{borderRadius: 50, backgroundColor: '#FFE4DE'}}
           title="Multiple image convert"
@@ -184,9 +215,10 @@ export default function EditedPhotos({navigation}) {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
-                    backgroundColor: 'grey',
+                    backgroundColor: '#CF9EAC',
                     borderRadius: 30,
                     marginTop: 5,
+                    alignItems: 'center',
                   }}>
                   <Icon
                     raised
@@ -196,16 +228,16 @@ export default function EditedPhotos({navigation}) {
                     color="#FF5D5D"
                   />
                   <Button
-                    loading={loading}
+                    loading={Buttonloading}
                     onPress={() =>
                       OcrText(p.node.image.uri).then((data) => {
-                        setLoading(false);
-                        navigation.navigate('OcrText', {
+                        setLoadingBtn(false);
+                        navigation.navigate('OCR TEXT', {
                           text: data,
                         });
                       })
                     }
-                    buttonStyle={{backgroundColor: 'grey'}}
+                    buttonStyle={{backgroundColor: '#CF9EAC'}}
                     loadingStyle={{padding: 20, color: 'red'}}
                     icon={
                       <Icon

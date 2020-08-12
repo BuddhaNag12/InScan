@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Dimensions, ToastAndroid, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ToastAndroid,
+  ActivityIndicator,
+} from 'react-native';
 import {Avatar, Button, Divider} from 'react-native-elements';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {Icon} from 'react-native-elements';
@@ -21,8 +28,8 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   text: {
-    fontFamily: 'Ionicons',
-    fontSize: 20,
+    fontFamily: 'Roboto',
+    fontSize: 18,
     fontWeight: 'normal',
     color: 'white',
   },
@@ -46,10 +53,11 @@ const styles = StyleSheet.create({
     top: 20,
     padding: 10,
     height: 50,
-    width: width / 2 + 30,
-    alignSelf: 'center',
+    width: width / 2 + 20,
+    alignItems: 'center',
     borderRadius: 30,
     margin: 5,
+    alignSelf: 'center',
   },
   HeadContainer: {
     backgroundColor: '#FFE4DE',
@@ -118,9 +126,7 @@ export default function CustomDrawer(props) {
     );
   };
 
-  if (initializing) return (
-    <ActivityIndicator size="large" />
-  );
+  if (initializing) return <ActivityIndicator size="large" />;
   return (
     <DrawerContentScrollView {...props}>
       <View style={{...styles.container}}>
@@ -209,14 +215,14 @@ export default function CustomDrawer(props) {
                   name="share"
                   type="ionicon"
                   color="rgba(200,0,0,0.5)"
-                  style={{padding:0}}
+                  style={{padding: 0}}
                 />
               }
               buttonStyle={{
                 backgroundColor: 'transparent',
-                justifyContent: "flex-start",
-                alignItems:"center",
-                paddingVertical:10,
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                paddingVertical: 10,
               }}
               titleStyle={{
                 fontFamily: 'Roboto',
@@ -232,7 +238,7 @@ export default function CustomDrawer(props) {
           <View
             style={{
               ...StyleSheet.absoluteFillObject,
-                 backgroundColor: '#FFE4DE',
+              backgroundColor: '#FFE4DE',
             }}
           />
           <View
@@ -246,7 +252,7 @@ export default function CustomDrawer(props) {
             <Button
               titleStyle={{
                 textTransform: 'uppercase',
-                fontFamily: 'Ionicons',
+                fontFamily: 'Roboto',
                 color: 'black',
               }}
               buttonStyle={styles.Button}

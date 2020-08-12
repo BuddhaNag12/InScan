@@ -7,7 +7,7 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {Image, Text, Icon, Button} from 'react-native-elements';
 import CameraRoll from '@react-native-community/cameraroll';
@@ -45,7 +45,7 @@ const ImageGrid = ({navigation}) => {
   //todo delete image selected
   const reset = () => {
     selectedImageUri([]);
-    setSel(false)
+    setSel(false);
   };
   const convertMultipleImage = async () => {
     const NewImgPath = imgUri.map((i) => i.substr(7));
@@ -102,10 +102,10 @@ const ImageGrid = ({navigation}) => {
   };
   if (loading) {
     return (
-      <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size="large" color="red" />
       </View>
-    )
+    );
   }
   return (
     <View style={{...styles.container}}>
@@ -170,27 +170,39 @@ const ImageGrid = ({navigation}) => {
           />
 
           {sel ? (
-            <View style={{justifyContent:"center",alignItems:"center",padding:3}}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 3,
+              }}>
               <Button
-              raised
-              titleStyle={{fontFamily:"Roboto",color:"black"}}
-              containerStyle={{justifyContent:"center",alignItems:"center"}}
-              buttonStyle={{borderRadius:50,backgroundColor:"#FFE4DE"}}
-              title="reset selection" onPress={() => reset()} />
-                 <Icon
-                  raised
-                  name="document-attach-outline"
-                  type="ionicon"
-                  color="#FF5D5D"
-                  onPress={() => convertMultipleImage()}
-                  />
+                raised
+                titleStyle={{fontFamily: 'Roboto', color: 'black'}}
+                containerStyle={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                buttonStyle={{borderRadius: 50, backgroundColor: '#FFE4DE'}}
+                title="reset selection"
+                onPress={() => reset()}
+              />
+              <Icon
+                raised
+                name="document-attach-outline"
+                type="ionicon"
+                color="#FF5D5D"
+                onPress={() => convertMultipleImage()}
+              />
             </View>
           ) : (
             <></>
           )}
         </View>
       ) : (
-       <Text style={{textAlign:"center",fontFamily:"Roboto",fontSize:20}}>No image selected</Text>
+        <Text style={{textAlign: 'center', fontFamily: 'Roboto', fontSize: 20}}>
+          No image selected
+        </Text>
       )}
     </View>
   );

@@ -17,33 +17,61 @@ export default function Signup({navigation}) {
   const [email, setEmail] = useState('');
   const [passowrd, setPass] = useState('');
   const [phone, setPhone] = useState('');
+  const [EmailError, setEmailError] = useState();
+  const [passwordError, setPasswordError] = useState();
   const [error, setError] = useState('');
+  const [eye, setEye] = useState('eye-off');
+  const [passVisible, setpassVisible] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const signUpUser = () => {
+    setLoading(true);
+    setEmailError('');
+    setPasswordError('');
     if (name && email && passowrd) {
       auth()
         .createUserWithEmailAndPassword(email, passowrd)
-        .then((uid) => {
-          // console.log('User account created & signed in!',uid);
+        .then(() => {
+          setLoading(false);
+          navigation.navigate('Dashboard');
         })
         .catch((error) => {
+          setLoading(false);
           if (error.code === 'auth/email-already-in-use') {
-            //console.log('That email address is already in use!');
-            setError('That email address is already in use!');
+            setEmailError('Email Id is already in use');
           }
 
           if (error.code === 'auth/invalid-email') {
-            //console.log('That email address is invalid!');
-            setError('That email address is invalid!');
+            setEmailError('Invalid Email');
           }
-          setError(error.code);
-          console.error(error);
+
+          if (error.code === 'auth/weak-password') {
+            setPasswordError(
+              'Invalid password Password needs to be at least 6 digits',
+            );
+          } else {
+            setError(error.code);
+          }
         });
     } else {
       alert('Enter valid input');
     }
   };
 
+  const setVisiblePassword = () => {
+    setpassVisible(!passVisible);
+    eye == 'eye' ? setEye('eye-off') : setEye('eye');
+  };
+  const SetrightIcon = () => {
+    return (
+      <Icon
+        name={eye}
+        type="ionicon"
+        onPress={() => setVisiblePassword()}
+        size={20}
+      />
+    );
+  };
   return (
     <View style={{...signUpStyle.container}}>
       <ScrollView>
@@ -55,7 +83,7 @@ export default function Signup({navigation}) {
               }}
               label="Full Name"
               placeholder="Full Name"
-              placeholderTextColor={error ? 'red' : 'grey'}
+              placeholderTextColor={'grey'}
               labelStyle={{color: 'black'}}
               errorStyle={{color: 'red'}}
               onChangeText={(val) => setName(val)}
@@ -64,27 +92,30 @@ export default function Signup({navigation}) {
             <Input
               inputContainerStyle={{
                 ...signUpStyle.inputStyle,
+                borderColor: EmailError ? 'red' : 'white',
               }}
               labelStyle={{color: 'black'}}
               placeholder="Email"
+              placeholderTextColor={'grey'}
               label="Email"
-              placeholderTextColor={error ? 'red' : 'grey'}
               leftIcon={<Icon name="mail" size={15} color="red" />}
               errorStyle={{color: 'red'}}
-              // errorMessage={error}
+              errorMessage={EmailError}
               onChangeText={(val) => setEmail(val)}
             />
             <Input
               inputContainerStyle={{
                 ...signUpStyle.inputStyle,
+                borderColor: passwordError ? 'red' : 'white',
               }}
+              secureTextEntry={passVisible}
               leftIcon={<Icon name="key" size={15} color="red" />}
+              rightIcon={<SetrightIcon />}
               labelStyle={{color: 'black'}}
-              placeholderTextColor={error ? 'red' : 'grey'}
               label="Password"
               placeholder="Password"
               errorStyle={{color: 'red'}}
-              // errorMessage={error}
+              errorMessage={passwordError}
               onChangeText={(val) => setPass(val)}
             />
             <Input
@@ -93,13 +124,14 @@ export default function Signup({navigation}) {
               }}
               leftIcon={<Icon name="call" size={15} color="red" />}
               labelStyle={{color: 'black'}}
-              placeholderTextColor={error ? 'red' : 'grey'}
+              placeholderTextColor={'grey'}
               label="Contact No"
               placeholder="Contact No"
               errorStyle={{color: 'red'}}
               onChangeText={(val) => setPhone(val)}
             />
             <Button
+              loading={loading}
               raised
               titleStyle={{fontFamily: 'Roboto'}}
               title="Sign Up"

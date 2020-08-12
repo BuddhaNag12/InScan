@@ -19,6 +19,8 @@ const height = Dimensions.get('window').height;
 const MyGallery = ({navigation}) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
+
   async function HasWritePermission() {
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
     const hasPermission = await PermissionsAndroid.check(permission);
@@ -64,8 +66,8 @@ const MyGallery = ({navigation}) => {
   };
 
   const deletePhoto = async (uri) => {
-    try {
-      CameraRoll.deletePhotos([uri]).then(() => {
+    CameraRoll.deletePhotos([uri])
+      .then(() => {
         showToastWithGravityAndOffset();
         CameraRoll.getPhotos({
           first: 20,
@@ -77,12 +79,27 @@ const MyGallery = ({navigation}) => {
             setPhotos(r.edges);
           })
           .catch((err) => {
+            setError(err);
             console.log(err);
+            ToastAndroid.showWithGravityAndOffset(
+              error,
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50,
+            );
           });
+      })
+      .catch((e) => {
+        setError(e);
+        ToastAndroid.showWithGravityAndOffset(
+          'Wait Before deletetion complete',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
       });
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   async function handleButtonPress() {
@@ -102,7 +119,6 @@ const MyGallery = ({navigation}) => {
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err);
       });
   }
 
@@ -124,8 +140,26 @@ const MyGallery = ({navigation}) => {
     })
       .then((image) => {
         saveFile(image);
+        ToastAndroid.showWithGravityAndOffset(
+          'File saved in edited image Drawer',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setError(error);
+        if (error == 'Error: User cancelled image selection') {
+          ToastAndroid.showWithGravityAndOffset(
+            'User cancelled Cropping',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        }
+      });
   }
 
   if (loading) {
@@ -139,26 +173,6 @@ const MyGallery = ({navigation}) => {
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
       <MyHeader navigation={navigation} />
-      <View
-        style={{
-          backgroundColor: '#60B6D8',
-          borderRadius: 40,
-          elevation: 4,
-          width: 300,
-          marginTop: 4,
-          height: 20,
-        }}>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontFamily: 'Ionicons',
-            fontSize: 20,
-            color: 'white',
-            textTransform: 'capitalize',
-          }}>
-          Documents from InScan library
-        </Text>
-      </View>
       {photos.length > 0 ? (
         <FlatList
           data={photos}
@@ -168,7 +182,8 @@ const MyGallery = ({navigation}) => {
             <View
               keyExtractor={(_, index) => index.toString()}
               style={{
-                paddingHorizontal:10,
+                marginVertical: 10,
+                paddingHorizontal: 20,
                 justifyContent: 'space-between',
               }}>
               <TouchableOpacity
@@ -179,10 +194,10 @@ const MyGallery = ({navigation}) => {
                   style={{
                     width: 150,
                     height: 150,
-                    borderWidth: 3,
+                    borderWidth: 2,
                     borderColor: 'white',
-                    resizeMode: 'contain',
-                    margin: 8,
+                    resizeMode: 'cover',
+                    margin: 4,
                   }}
                 />
               </TouchableOpacity>
@@ -190,14 +205,14 @@ const MyGallery = ({navigation}) => {
                 style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                 <Icon
                   raised
-                  size={10}
+                  size={18}
                   onPress={() => cropImage(item.node.image.uri)}
                   name="create-outline"
                   type="ionicon"
                   color="#FF5D5D"
                 />
                 <Icon
-                  size={10}
+                  size={18}
                   raised
                   onPress={() => deletePhoto(item.node.image.uri)}
                   name="trash-outline"
@@ -209,12 +224,14 @@ const MyGallery = ({navigation}) => {
           )}
         />
       ) : (
-        <View>
-          <Text style={{fontFamily: 'Roboto', fontSize: 20}}>No Images</Text>
+        <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+          <Text style={{fontFamily: 'Roboto', fontSize: 15, color: 'grey'}}>
+            No Images
+          </Text>
           <Button
             title="Camera"
             titleStyle={{fontFamily: 'Roboto', color: 'white'}}
-            icon={<Icon name="camera" size={20} color="#FF8066" />}
+            icon={<Icon name="camera" size={20} color="#ddd" />}
             buttonStyle={{backgroundColor: '#C34A36', borderRadius: 30}}
             onPress={() => navigation.navigate('Camera')}
           />
