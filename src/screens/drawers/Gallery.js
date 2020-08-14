@@ -14,7 +14,7 @@ import MyHeader from '../../components/header/Header';
 import CameraRoll from '@react-native-community/cameraroll';
 import ImagePicker from 'react-native-image-crop-picker';
 
-const height = Dimensions.get('window').height;
+const {height,width} = Dimensions.get('window');
 
 const MyGallery = ({navigation}) => {
   const [photos, setPhotos] = useState([]);
@@ -84,7 +84,7 @@ const MyGallery = ({navigation}) => {
             ToastAndroid.showWithGravityAndOffset(
               error,
               ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
+              ToastAndroid.CENTER,
               25,
               50,
             );
@@ -143,7 +143,7 @@ const MyGallery = ({navigation}) => {
         ToastAndroid.showWithGravityAndOffset(
           'File saved in edited image Drawer',
           ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
+          ToastAndroid.CENTER,
           25,
           50,
         );
@@ -154,7 +154,7 @@ const MyGallery = ({navigation}) => {
           ToastAndroid.showWithGravityAndOffset(
             'User cancelled Cropping',
             ToastAndroid.LONG,
-            ToastAndroid.BOTTOM,
+            ToastAndroid.CENTER,
             25,
             50,
           );
@@ -171,7 +171,7 @@ const MyGallery = ({navigation}) => {
   }
 
   return (
-    <View style={{flex: 1, alignItems: 'center'}}>
+    <View style={{flex: 1}}>
       <MyHeader navigation={navigation} />
       {photos.length > 0 ? (
         <FlatList
@@ -182,9 +182,9 @@ const MyGallery = ({navigation}) => {
             <View
               keyExtractor={(_, index) => index.toString()}
               style={{
-                marginVertical: 10,
-                paddingHorizontal: 20,
-                justifyContent: 'space-between',
+                flex:1,
+                justifyContent: "space-around",
+                alignItems:"center"
               }}>
               <TouchableOpacity
                 onPress={() => openPreview(item.node.image.uri)}>
@@ -192,8 +192,8 @@ const MyGallery = ({navigation}) => {
                   source={{uri: item.node.image.uri}} // Use item to set the image source
                   key={index} // Important to set a key for list items
                   style={{
-                    width: 150,
-                    height: 150,
+                    width: width/2-10,
+                    height: 180,
                     borderWidth: 2,
                     borderColor: 'white',
                     resizeMode: 'cover',
@@ -224,7 +224,7 @@ const MyGallery = ({navigation}) => {
           )}
         />
       ) : (
-        <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{fontFamily: 'Roboto', fontSize: 15, color: 'grey'}}>
             No Images
           </Text>

@@ -48,7 +48,7 @@ function DrawerNavigator() {
       overlayColor="rgba(222,80,0,0.2)"
       drawerStyle={{
         backgroundColor: '#EAFFFE',
-        width: (windowWidth/2)+80,
+        width: windowWidth / 2 + 80,
       }}>
       <Drawer.Screen name="Dashboard" component={Dashboard} />
       <Drawer.Screen name="Gallery" component={MyGallery} />
@@ -91,15 +91,13 @@ export default function App({navigation}) {
             <Stack.Screen
               name="Sign In"
               component={Signin}
-            
               options={{
                 headerTitle: (props) => <SignInTitle {...props} />,
-                   headerStyle: {      
+                headerStyle: {
                   backgroundColor: '#f4511e',
                   opacity: 0.8,
-                  
                 },
-                headerTintColor:"white"
+                headerTintColor: 'white',
               }}
             />
             <Stack.Screen
@@ -145,12 +143,12 @@ export default function App({navigation}) {
               component={DocumentView}
               options={{headerShown: true}}
             />
-            <Stack.Screen name="OCR TEXT" component={OcrText}
-            options={
-             {
-               headerTitle:"OCR TEXT"
-             }
-            }
+            <Stack.Screen
+              name="OCR TEXT"
+              component={OcrText}
+              options={{
+                headerTitle: 'OCR TEXT',
+              }}
             />
           </>
         )}

@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
   Text,
-  ImageBackground,
+  Image,
   Dimensions,
   ScrollView,
 } from 'react-native';
@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headingImg: {
+    flex:1,
     justifyContent: 'center',
-    alignItems: 'center',
   },
   content: {
     flex: 1,
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     height: 400,
     width: width,
-    right: 2,
+    right: 0,
   },
   headingText: {
     justifyContent: 'center',
@@ -41,10 +41,12 @@ const styles = StyleSheet.create({
   },
 
   info: {
-    textAlign: 'left',
+    textAlign: "auto",
     fontFamily: 'Roboto',
-    fontSize: 20,
+    fontSize: 18,
     textTransform: 'capitalize',
+    color:"black",
+    letterSpacing:0.4,
   },
   helpArea: {
     marginVertical: 4,
@@ -64,7 +66,7 @@ const Images = require('../../../assets/help.png');
 const HeadingImg = () => {
   return (
     <View style={{...styles.headingImg}}>
-      <ImageBackground
+      <Image
         source={Images}
         style={{
           ...styles.backgroundImage,

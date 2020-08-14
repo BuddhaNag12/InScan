@@ -3,7 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
-  ImageBackground,
+  Image,
   Dimensions,
   ScrollView,
   Linking,
@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
   },
   headingImg: {
     justifyContent: 'center',
-    alignItems: 'center',
   },
   content: {
     flex: 1,
@@ -30,9 +29,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   backgroundImage: {
-    height: height / 2 + 50,
     width: width,
+    height: 400,
     right: 2,
+    transform: [{scale: 1.1}, {translateY: -15}],
+    resizeMode: 'contain',
   },
   headingWrapper: {
     marginVertical: 4,
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   h1: {
+    textTransform:"capitalize",
     textAlign: 'left',
     fontFamily: 'Roboto',
     fontSize: 20,
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   aboutWrapper: {
-    width:width-20,
+    width: width - 20,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -105,7 +107,7 @@ const imgUrl = require('../../../assets/about.png');
 const ImageHeading = () => {
   return (
     <View style={{...styles.headingImg}}>
-      <ImageBackground
+      <Image
         source={imgUrl}
         style={{
           ...styles.backgroundImage,
@@ -122,14 +124,14 @@ const AboutMeAvatar = () => {
         <Text style={{...styles.h3}}>About The Developer</Text>
       </View>
       <View style={{...styles.aboutWrapper}}>
-      <Avatar
+        <Avatar
           rounded
           source={{
             uri:
               'https://scontent.fgau2-1.fna.fbcdn.net/v/t1.0-9/106093797_3105706246172854_6244516452109243435_n.jpg?_nc_cat=105&_nc_sid=09cbfe&_nc_ohc=Cm3f2moh4ZgAX8tBqRI&_nc_ht=scontent.fgau2-1.fna&oh=e1f2ff3f30c72c9649c0050e68b61a88&oe=5F572093',
           }}
         />
-      <Text
+        <Text
           style={{...styles.h2}}
           onPress={() =>
             Linking.openURL('https://www.facebook.com/ItSBuddhaHERE/')
@@ -137,7 +139,6 @@ const AboutMeAvatar = () => {
           Buddha Nag
         </Text>
       </View>
-   
     </View>
   );
 };
