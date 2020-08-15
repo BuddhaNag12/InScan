@@ -1,3 +1,6 @@
 import React from 'react';
 
-export const AuthContext = React.createContext(null)
+const  PdfContext = React.createContext({});
+
+
+export default PdfContext;

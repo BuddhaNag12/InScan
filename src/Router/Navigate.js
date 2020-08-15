@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import auth from '@react-native-firebase/auth';
 // Component
 import {
@@ -7,7 +7,6 @@ import {
   SignUpTitle,
   MultipleEditingTitle,
 } from '../components/HeaderTitle';
-// import {DropDownButton} from '../screens/drawers/Documents';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -79,7 +78,7 @@ export default function App({navigation}) {
     return <ActivityIndicator size="large" />;
   }
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       <Stack.Navigator>
         {!user ? (
           <>
@@ -141,7 +140,9 @@ export default function App({navigation}) {
             <Stack.Screen
               name="Document"
               component={DocumentView}
-              options={{headerShown: true}}
+              options={{
+              headerShown:false,
+              }}
             />
             <Stack.Screen
               name="OCR TEXT"

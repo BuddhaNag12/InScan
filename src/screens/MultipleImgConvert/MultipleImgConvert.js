@@ -8,12 +8,13 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import {Image, Text, Icon, Button} from 'react-native-elements';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNImageToPdf from 'react-native-image-to-pdf';
 const height = Dimensions.get('screen').height;
-
+import * as Animatable from 'react-native-animatable';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -48,6 +49,7 @@ const ImageGrid = ({navigation}) => {
     setSel(false);
   };
   const convertMultipleImage = async () => {
+    setLoading(true);
     const NewImgPath = imgUri.map((i) => i.substr(7));
     try {
       const options = {
@@ -64,12 +66,15 @@ const ImageGrid = ({navigation}) => {
         quality: 1.0, // optional compression paramter
       };
       RNImageToPdf.createPDFbyImages(options).then((pdf) => {
+        setLoading(false);
+        ToastAndroid.show(
+          'PDF saved at location ' + pdf.filePath,
+          ToastAndroid.LONG,
+        );
         navigation.navigate('Document', {
           pdfUri: pdf.filePath,
         });
       });
-      // ToastAndroid.show("PDF saved at location "+pdf.filePath, ToastAndroid.LONG);
-      // console.log(pdf.filePath);
     } catch (e) {
       console.log(e);
     }
@@ -110,6 +115,19 @@ const ImageGrid = ({navigation}) => {
   return (
     <View style={{...styles.container}}>
       <View>
+        {sel ? (
+          <Animatable.Text
+            animation="fadeInRight"
+            style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+            Multiple Image select clink on photos to select each of them
+          </Animatable.Text>
+        ) : (
+          <Animatable.Text
+            animation="fadeInRight"
+            style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+            Hold on any photo to enable multiple selection
+          </Animatable.Text>
+        )}
         <FlatList
           data={photos}
           keyExtractor={(_, index) => index}
@@ -117,7 +135,11 @@ const ImageGrid = ({navigation}) => {
           renderItem={({item, index}) => (
             <View style={{flex: 1}}>
               <TouchableOpacity
-                onPress={() => openPreview(item.node.image.uri)}
+                onPress={() =>
+                  sel
+                    ? selectedImage(item.node.image.uri, index)
+                    : openPreview(item.node.image.uri)
+                }
                 onLongPress={() => selectedImage(item.node.image.uri, index)}>
                 <Image
                   source={{uri: item.node.image.uri}} // Use item to set the image source
@@ -127,7 +149,7 @@ const ImageGrid = ({navigation}) => {
                     height: 100,
                     borderWidth: 3,
                     borderColor: 'white',
-                    resizeMode: 'contain',
+                    resizeMode: 'cover',
                     margin: 8,
                   }}
                 />
@@ -161,8 +183,8 @@ const ImageGrid = ({navigation}) => {
                     height: 100,
                     borderWidth: 3,
                     borderColor: 'white',
-                    resizeMode: 'contain',
-                    margin: 8,
+                    resizeMode: 'cover',
+                    margin: 10,
                   }}
                 />
               </View>
@@ -187,12 +209,19 @@ const ImageGrid = ({navigation}) => {
                 title="reset selection"
                 onPress={() => reset()}
               />
-              <Icon
-                raised
-                name="document-attach-outline"
-                type="ionicon"
-                color="#FF5D5D"
+              <Button
+                loading={loading}
                 onPress={() => convertMultipleImage()}
+                buttonStyle={{backgroundColor: 'transparent'}}
+                loadingStyle={{padding: 20, color: 'red'}}
+                icon={
+                  <Icon
+                    raised
+                    name="document-attach-outline"
+                    type="ionicon"
+                    color="#FF5D5D"
+                  />
+                }
               />
             </View>
           ) : (

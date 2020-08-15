@@ -140,6 +140,7 @@ export default function EditedPhotos({navigation}) {
   };
 
   const convertSinglePdf = async (imgPath) => {
+    setLoading(true);
     const NewimgPath = imgPath.substr(7);
     try {
       // convert image to pdf
@@ -156,6 +157,7 @@ export default function EditedPhotos({navigation}) {
         quality: 1.0, // optional compression paramter
       };
       RNImageToPdf.createPDFbyImages(options).then((pdf) => {
+        setLoading(false);
         navigation.navigate('Document', {
           pdfUri: pdf.filePath,
         });

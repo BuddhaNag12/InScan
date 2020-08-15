@@ -1,77 +1,46 @@
 import React from 'react';
-import {StyleSheet, Dimensions, View} from 'react-native';
-import {Button} from 'react-native-elements';
-
+import {StyleSheet, Dimensions,View} from 'react-native';
 import Pdf from 'react-native-pdf';
-import Share from 'react-native-share';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import DocumentHeader from '../../components/DocumentHeader'
+import PdfContext from '../../components/context';
 
-export default function DocumentView({route}) {
+export default function DocumentView({route,navigation}) {
   const {pdfUri} = route.params;
   const source = {uri: pdfUri, cache: true};
-  const shareFile = () => {
-    const shareOptions = {
-      title: 'Share via',
-      url: `file://${pdfUri}`,
-    };
-    Share.open(shareOptions)
-      .then((res) => {
-        console.log('shared ', res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
   return (
-    <View style={styles.container}>
-      <View style={styles.pdfContainer}>
-        <View style={{alignItems: 'flex-end'}}>
-          <Button
-            title="Share this pdf"
-            onPress={() => shareFile()}
-            icon={
-              <Icon
-              name="file-pdf"
-              size={20}
-              />
-            }
-            buttonStyle={{
-              backgroundColor: "transparent"
+    <PdfContext.Provider value={pdfUri}>
+      <DocumentHeader navigation={navigation} />
+        <View style={styles.container}>
+        <Pdf
+            source={source}
+            onLoadComplete={(numberOfPages, filePath) => {
+              console.log(`number of pages: ${numberOfPages}`);
             }}
-            titleStyle={{color: 'black', fontFamily: 'Roboto'}}
+            onPageChanged={(page, numberOfPages) => {
+              console.log(`current page: ${page}`);
+            }}
+            onError={(error) => {
+              console.log(error);
+            }}
+            onPressLink={(uri) => {
+              console.log(`Link presse: ${uri}`);
+            }}
+            style={styles.pdf}
           />
         </View>
-        <Pdf
-          source={source}
-          onLoadComplete={(numberOfPages, filePath) => {
-            console.log(`number of pages: ${numberOfPages}`);
-          }}
-          onPageChanged={(page, numberOfPages) => {
-            console.log(`current page: ${page}`);
-          }}
-          onError={(error) => {
-            console.log(error);
-          }}
-          onPressLink={(uri) => {
-            console.log(`Link presse: ${uri}`);
-          }}
-          style={styles.pdf}
-        />
-      </View>
-    </View>
+    </PdfContext.Provider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop:10,
   },
   pdf: {
     flex: 1,
-    width: Dimensions.get('window').width,
+    padding: 10,
+    width: Dimensions.get('window').width-10,
     height: Dimensions.get('window').height,
-  },
-  pdfContainer: {
-    flex: 1,
   },
 });
