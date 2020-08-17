@@ -177,7 +177,7 @@ export default function CustomDrawer(props) {
             />
             <DrawerButtons
               title="Gallery"
-              IconName="images"
+              IconName="image"
               navigation={props.navigation}
               routeTo="Gallery"
             />
@@ -186,6 +186,12 @@ export default function CustomDrawer(props) {
               IconName="expand"
               navigation={props.navigation}
               routeTo="Edited Documents"
+            />
+            <DrawerButtons
+              title="Multiple Image convert"
+              IconName="images"
+              navigation={props.navigation}
+              routeTo="Convert"
             />
             <DrawerButtons
               title="Documents"
@@ -199,7 +205,6 @@ export default function CustomDrawer(props) {
               navigation={props.navigation}
               routeTo="Help"
             />
-
             <Divider style={{backgroundColor: 'black'}} />
             <DrawerButtons
               title="About us"
@@ -211,12 +216,12 @@ export default function CustomDrawer(props) {
               onPress={() => shareFile()}
               title="Share this app"
               icon={
-                <Icon
-                  name="share"
-                  type="ionicon"
-                  color="rgba(200,0,0,0.5)"
-                  style={{padding: 0}}
-                />
+                <View
+                  style={{
+                    paddingHorizontal: 4,
+                  }}>
+                  <Icon name="share" type="ionicon" color="rgba(200,0,0,0.5)" />
+                </View>
               }
               buttonStyle={{
                 backgroundColor: 'transparent',
@@ -226,9 +231,9 @@ export default function CustomDrawer(props) {
               }}
               titleStyle={{
                 fontFamily: 'Roboto',
-                color: 'black',
+                color: 'grey',
                 textAlign: 'center',
-                paddingHorizontal: 15,
+                paddingHorizontal: 45,
               }}
             />
           </View>

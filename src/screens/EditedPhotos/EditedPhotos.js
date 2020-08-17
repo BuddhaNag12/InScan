@@ -1,3 +1,9 @@
+/**
+ * @author BUDDHA NAG
+ * @email rahulnag514@gmail.com
+ * @create date 2020-08-17 17:01:53
+ * @modify date 2020-08-17 17:20:39
+ */
 import React from 'react';
 import {
   TouchableOpacity,
@@ -178,103 +184,101 @@ export default function EditedPhotos({navigation}) {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <MyHeader navigation={navigation} />
-      <Text style={{textAlign: 'center', fontFamily: 'Roboto', fontSize: 20}}>
-        Images from InScan library
-      </Text>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-          Convert Multiple image click here
-        </Text>
-
-        <Button
-          titleStyle={{fontFamily: 'Roboto', color: '#564147'}}
-          containerStyle={{justifyContent: 'center', alignItems: 'center'}}
-          buttonStyle={{borderRadius: 50, backgroundColor: '#FFE4DE'}}
-          title="Multiple image convert"
-          onPress={() => navigation.navigate('Convert')}
-        />
-      </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView showsHorizontalScrollIndicator={false} horizontal>
         {EditedPhotos.length > 0 ? (
           EditedPhotos.map((p, i) => {
             return (
-              <Card
-                containerStyle={{borderRadius: 30, height: height - 180}}
+              <View
+                style={{
+                  flex: 1,
+                  marginVertical:20,
+                  padding: 5,
+                  height:height
+                }}
                 key={i}>
-                <TouchableOpacity onPress={() => openPreview(p.node.image.uri)}>
-                  <Image
-                    key={i}
+                <Card
+                  containerStyle={{
+                    borderRadius: 20,
+                    height: height - 170,
+                    width: 350,
+                    padding: 4,
+                    margin: 0,
+                  }}
+                  key={i}>
+                  <TouchableOpacity
+                    onPress={() => openPreview(p.node.image.uri)}>
+                    <Image
+                      style={{
+                        height: height - 300,
+                        borderRadius: 20,
+                      }}
+                      source={{uri: p.node.image.uri}}
+                      PlaceholderContent={<ActivityIndicator />}
+                    />
+                  </TouchableOpacity>
+                  <View
                     style={{
-                      width: 350,
-                      height: height - 300,
-                      borderRadius: 30,
-                    }}
-                    source={{uri: p.node.image.uri}}
-                    PlaceholderContent={<ActivityIndicator />}
-                  />
-                </TouchableOpacity>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    backgroundColor: '#CF9EAC',
-                    borderRadius: 30,
-                    marginTop: 5,
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    raised
-                    onPress={() => convertSinglePdf(p.node.image.uri)}
-                    name="document-attach-outline"
-                    type="ionicon"
-                    color="#FF5D5D"
-                  />
-                  <Button
-                    loading={Buttonloading}
-                    onPress={() =>
-                      OcrText(p.node.image.uri).then((data) => {
-                        setLoadingBtn(false);
-                        navigation.navigate('OCR TEXT', {
-                          text: data,
-                        });
-                      })
-                    }
-                    buttonStyle={{backgroundColor: '#CF9EAC'}}
-                    loadingStyle={{padding: 20, color: 'red'}}
-                    icon={
-                      <Icon
-                        raised
-                        name="pencil"
-                        type="ionicon"
-                        color="#574240"
-                      />
-                    }
-                  />
-                  <Icon
-                    raised
-                    onPress={() => deletePhoto(p.node.image.uri)}
-                    name="trash-outline"
-                    type="ionicon"
-                    color="#574240"
-                  />
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    paddingLeft: 5,
-                  }}>
-                  <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-                    Pdf
-                  </Text>
-                  <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-                    Copy text
-                  </Text>
-                  <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-                    Delete
-                  </Text>
-                </View>
-              </Card>
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      backgroundColor: '#CF9EAC',
+                      borderRadius: 20,
+                      marginTop: 5,
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      raised
+                      onPress={() => convertSinglePdf(p.node.image.uri)}
+                      name="document-attach-outline"
+                      type="ionicon"
+                      color="#FF5D5D"
+                    />
+                    <Button
+                      loading={Buttonloading}
+                      onPress={() =>
+                        OcrText(p.node.image.uri).then((data) => {
+                          setLoadingBtn(false);
+                          navigation.navigate('OCR TEXT', {
+                            text: data,
+                          });
+                        })
+                      }
+                      buttonStyle={{backgroundColor: '#CF9EAC'}}
+                      loadingStyle={{padding: 20, color: 'red'}}
+                      icon={
+                        <Icon
+                          raised
+                          name="pencil"
+                          type="ionicon"
+                          color="#574240"
+                        />
+                      }
+                    />
+                    <Icon
+                      raised
+                      onPress={() => deletePhoto(p.node.image.uri)}
+                      name="trash-outline"
+                      type="ionicon"
+                      color="#574240"
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      paddingLeft: 5,
+                    }}>
+                    <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+                      Pdf
+                    </Text>
+                    <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+                      Copy text
+                    </Text>
+                    <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+                      Delete
+                    </Text>
+                  </View>
+                </Card>
+              </View>
             );
           })
         ) : (

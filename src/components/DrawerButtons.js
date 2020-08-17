@@ -1,42 +1,35 @@
 import React from 'react';
-import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {StyleSheet} from 'react-native';
-
+import {StyleSheet, View} from 'react-native';
+import {DrawerItem} from '@react-navigation/drawer';
 const styles = StyleSheet.create({
   Button: {
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon: {
     flex: 1,
-    padding: 3,
-    margin: 2,
-    color:"#FF7D85"
+    justifyContent: 'center',
   },
 });
 const DrawerButtons = ({routeTo, navigation, title, IconName}) => {
   return (
-    <Button
-      titleStyle={{
-        textTransform: 'capitalize',
+    <DrawerItem
+      label={title}
+      style={{...styles.Button}}
+      labelStyle={{
         fontFamily: 'Roboto',
-        color: '#46332E',
-        textAlign: 'left',
-        flex: 4,
+        color: 'grey',
       }}
-      buttonStyle={styles.Button}
-      icon={
-        <Icon
-          name={IconName}
-          size={25}
-          color="rgba(255,50,10,0.8)"
-          style={styles.icon}
-        />
-      }
-      title={title}
       onPress={() => navigation.navigate(routeTo)}
+      icon={({focused}) => {
+        return (
+          <View style={{width: 40}}>
+            <Icon
+              name={IconName}
+              size={25}
+              color="rgba(255,50,10,0.8)"
+              style={{color: '#FF7772'}}
+            />
+          </View>
+        );
+      }}
     />
   );
 };

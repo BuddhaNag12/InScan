@@ -131,9 +131,10 @@ const ImageGrid = ({navigation}) => {
         <FlatList
           data={photos}
           keyExtractor={(_, index) => index}
-          numColumns={4}
+          numColumns={3}
           renderItem={({item, index}) => (
-            <View style={{flex: 1}}>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <TouchableOpacity
                 onPress={() =>
                   sel
@@ -174,7 +175,12 @@ const ImageGrid = ({navigation}) => {
             keyExtractor={(_, index) => index}
             numColumns={4}
             renderItem={({item, index}) => (
-              <View style={{flex: 1}}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <Image
                   source={{uri: item}} // Use item to set the image source
                   key={index} // Important to set a key for list items

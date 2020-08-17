@@ -29,30 +29,25 @@ export default function Home({navigation}) {
         }
       />
       <ImageBackground source={image} style={styles.image} />
-      <View style={{justifyContent: 'flex-end', alignItems: 'center', flex: 1}}>
+      <View style={{justifyContent: 'flex-end', alignItems: 'center', flex: 1,padding:4}}>
         <Button
           title="Sign In"
           titleStyle={{
-            color: 'white',
+            color: '#4B4453',
             fontFamily: 'Roboto',
-            fontWeight: '200',
+            fontSize:20,
           }}
           buttonStyle={{
-            backgroundColor:"rgba(200,100,0,0.7)",
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderColor: '#FF8066',
             width: 200,
             borderRadius: 30,
             height: 50,
-            shadowRadius: 20,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
           }}
-          icon={<Icon style={{padding: 5}} name="lock" size={20} color="white" />}
+          icon={
+            <Icon style={{padding: 5}} name="lock" size={20} color="white" />
+          }
           onPress={() => navigation.navigate('Sign In')}
         />
         <View style={{height: 2}}></View>
@@ -63,10 +58,10 @@ export default function Home({navigation}) {
           titleStyle={{
             color: 'black',
             fontFamily: 'Roboto',
-            fontWeight: '200',
+            fontSize:20,
           }}
           buttonStyle={{
-            backgroundColor: '#FFF4F0',
+            backgroundColor: 'rgba(100,200,0,0.8)',
             opacity: 0.8,
             borderRadius: 30,
             width: 200,

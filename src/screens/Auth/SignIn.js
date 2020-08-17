@@ -4,9 +4,10 @@ import auth from '@react-native-firebase/auth';
 import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import loginStyle from './loginStyle';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+const emailRef = React.createRef();
+const passwordRef = React.createRef();
 
 export default function Signin({navigation}) {
-  const inputField = React.createRef();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [EmailError, setEmailError] = useState('');
@@ -61,15 +62,31 @@ export default function Signin({navigation}) {
           setLoading(false);
         })
         .catch((error) => {
-          if (error.code === 'auth/invalid-email') {
+          if (error.code == 'auth/invalid-email') {
             setEmailError('invalid email address');
             setLoading(false);
+            emailRef.current.clear();
+            emailRef.current.shake();
+            passwordRef.current.shake();
           }
-          if (error.code === 'auth/wrong-passowrd') {
+          if (error.code == 'auth/wrong-password') {
             setPasswordError('invalid passowrd');
             setLoading(false);
+            passwordRef.current.shake();
+            passwordRef.current.clear();
           }
-          setPasswordError('invalid Email or passowrd');
+          if (error.code == 'auth/too-many-requests') {
+            emailRef.current.clear();
+            passwordRef.current.clear();
+            setPasswordError('Too Many Atempts Try a bit later');
+            setLoading(false);
+          }
+          if (error.code == 'auth/user-not-found') {
+            setPasswordError('User not found try signing up');
+            emailRef.current.clear();
+            passwordRef.current.clear();
+            setLoading(false);
+          }
           setLoading(false);
         });
     }
@@ -108,13 +125,12 @@ export default function Signin({navigation}) {
                 },
                 shadowOpacity: 0.2,
                 shadowRadius: 1.41,
-
                 elevation: 2,
               }}
               leftIcon={
                 <Icon name="mail" type="ionicon" size={20} color="#FC8686" />
               }
-              ref={inputField}
+              ref={emailRef}
               placeholder="Email"
               errorStyle={{color: 'red'}}
               errorMessage={EmailError}
@@ -138,7 +154,7 @@ export default function Signin({navigation}) {
                 elevation: 2,
               }}
               secureTextEntry={passVisible}
-              ref={inputField}
+              ref={passwordRef}
               leftIcon={
                 <Icon color="#FC8686" type="ionicon" name="key" size={20} />
               }

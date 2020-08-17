@@ -163,6 +163,7 @@ const DocumentList = ({navigation}) => {
                 }
                 onLongPress={() => toggleOverlay(item.path)}
                 bottomDivider
+                
               />
             </View>
           );

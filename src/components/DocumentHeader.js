@@ -31,7 +31,7 @@ const DocumentHeader = ({navigation}) => {
           opacity: 1,
         }}
         leftComponent={
-          <View style={{paddingHorizontal: 4}}>
+          <View style={{paddingHorizontal: 4,}}>
             <TouchableWithoutFeedback   onPress={() => navigation.goBack()}>
             <Icon
               name="arrow-left"
@@ -48,9 +48,10 @@ const DocumentHeader = ({navigation}) => {
         }
         rightComponent={
           <Button
+            titleStyle={{paddingHorizontal:5}}
             icon={<Icon name="share" color="white" size={15} />}
             title="Share"
-            buttonStyle={{backgroundColor: 'transparent'}}
+            buttonStyle={{backgroundColor: 'transparent',paddingHorizontal:5,}}
             onPress={() => shareFile()}
           />
         }></Header>

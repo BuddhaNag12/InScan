@@ -78,7 +78,7 @@ export default function App({navigation}) {
     return <ActivityIndicator size="large" />;
   }
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       <Stack.Navigator>
         {!user ? (
           <>
@@ -135,13 +135,14 @@ export default function App({navigation}) {
                   backgroundColor: '#f4511e',
                   opacity: 0.8,
                 },
+                headerTintColor: 'white',
               }}
             />
             <Stack.Screen
               name="Document"
               component={DocumentView}
               options={{
-              headerShown:false,
+                headerShown: false,
               }}
             />
             <Stack.Screen
