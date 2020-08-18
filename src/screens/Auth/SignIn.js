@@ -27,11 +27,23 @@ export default function Signin({navigation}) {
       await GoogleSignin.hasPlayServices();
       const {idToken} = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const user = auth().signInWithCredential(googleCredential);
+      const user = auth()
+        .signInWithCredential(googleCredential)
+        .then((user) => {
+          setLoading(false);
+          if (user) {
+            navigation.navigate('Dashboard');
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
       setLoading(false);
       return user;
     } catch (error) {
+      setLoading(false);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        alert('Cancelled');
         console.log(error);
       } else if (error.code === statusCodes.IN_PROGRESS) {
         console.log(error);
@@ -143,14 +155,6 @@ export default function Signin({navigation}) {
                 borderRadius: 60,
                 padding: 10,
                 backgroundColor: '#fefefe',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
-
                 elevation: 2,
               }}
               secureTextEntry={passVisible}
@@ -193,15 +197,7 @@ export default function Signin({navigation}) {
               <SocialIcon
                 raised
                 type="google"
-                onPress={() =>
-                  onGoogleButtonPress()
-                    .then(() => {
-                      navigation.navigate('Dashboard');
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    })
-                }
+                onPress={() => onGoogleButtonPress()}
               />
 
               <SocialIcon raised type="facebook" />

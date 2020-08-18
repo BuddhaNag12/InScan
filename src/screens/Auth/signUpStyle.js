@@ -8,12 +8,13 @@ export default StyleSheet.create({
     borderRadius: 60,
     padding: 6,
     backgroundColor: '#fefefe',
+    elevation:2,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fefefe',
+    backgroundColor: '#EAFFFE',
   },
   HeadingText: {
     fontFamily: 'Roboto_medium',
@@ -28,9 +29,7 @@ export default StyleSheet.create({
     padding: 10,
     margin: 5,
   },
-  socialButtonContainer: {
-    flex: 1,
-  },
+
   heading2Text: {
     fontFamily: 'Roboto',
     textAlign: 'center',
@@ -38,6 +37,6 @@ export default StyleSheet.create({
   box1: {
     borderBottomRightRadius: 75,
     backgroundColor: '#FFE4DE',
-    height: 0.72 * height,
+    height: 0.60 * height,
   },
 });

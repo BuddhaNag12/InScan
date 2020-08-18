@@ -29,17 +29,23 @@ export default function Home({navigation}) {
         }
       />
       <ImageBackground source={image} style={styles.image} />
-      <View style={{justifyContent: 'flex-end', alignItems: 'center', flex: 1,padding:4}}>
+      <View
+        style={{
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          flex: 1,
+          padding: 4,
+        }}>
         <Button
           title="Sign In"
           titleStyle={{
-            color: '#4B4453',
+            color: 'white',
             fontFamily: 'Roboto',
-            fontSize:20,
+            fontSize: 20,
           }}
           buttonStyle={{
             backgroundColor: 'transparent',
-            borderWidth: 2,
+            borderWidth: 1,
             borderColor: '#FF8066',
             width: 200,
             borderRadius: 30,
@@ -56,19 +62,21 @@ export default function Home({navigation}) {
           type="clear"
           onPress={() => navigation.navigate('Sign Up')}
           titleStyle={{
-            color: 'black',
+            color: 'white',
             fontFamily: 'Roboto',
-            fontSize:20,
+            fontSize: 20,
           }}
           buttonStyle={{
-            backgroundColor: 'rgba(100,200,0,0.8)',
+            backgroundColor: '#0BBD00',
             opacity: 0.8,
             borderRadius: 30,
             width: 200,
             height: 50,
             elevation: 2,
           }}
-          icon={<Icon style={{padding: 5}} name="user" size={20} color="red" />}
+          icon={
+            <Icon style={{padding: 5}} name="user" size={20} color="white" />
+          }
         />
       </View>
     </SafeAreaView>
