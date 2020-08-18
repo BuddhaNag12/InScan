@@ -15,3 +15,10 @@ This apps is under development. Expected alpha version soon.
 
 *More Comming Soon
 
+## App screenshots
+![Group 1](https://user-images.githubusercontent.com/31861172/90497152-62df4500-e164-11ea-870f-ef7f0a475410.png)
+![Group 2](https://user-images.githubusercontent.com/31861172/90497158-64a90880-e164-11ea-8f28-f5da26965968.png)
+![Group 3](https://user-images.githubusercontent.com/31861172/90497161-65da3580-e164-11ea-85e3-200df862a72a.png)
+![Group 4](https://user-images.githubusercontent.com/31861172/90497163-6672cc00-e164-11ea-9260-430628869ae8.png)
+![Group 5](https://user-images.githubusercontent.com/31861172/90497166-67a3f900-e164-11ea-8ee8-e15ef551aa32.png)
+![Group 8](https://user-images.githubusercontent.com/31861172/90497169-683c8f80-e164-11ea-8f78-e940afb18397.png)
