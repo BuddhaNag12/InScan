@@ -1,6 +1,7 @@
-## Welcome to InScan 
+## InScanner - Document scan and convert to pdf
+Inscanner is a Scanning tool which provides Scanning of Handwritten text as well as bookish text directly
+and with it you can capture documents and convert them directly into pdf
 
-With this app you can scan document and convert it to pdf
 ## Work in progress
 This apps is under development. Expected alpha version soon.
 > Features
