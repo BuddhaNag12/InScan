@@ -124,6 +124,8 @@ export default function Signin({navigation}) {
           <Text style={loginStyle.HeadingText}>Sign In</Text>
           <View style={loginStyle.LoginForm}>
             <Input
+              autoCompleteType="email"
+              autoCapitalize="none"
               inputContainerStyle={{
                 borderWidth: 2,
                 borderColor: 'white',
@@ -149,6 +151,8 @@ export default function Signin({navigation}) {
               onChangeText={(val) => setUsername(val)}
             />
             <Input
+              autoCompleteType="password"
+              autoCapitalize="none"
               inputContainerStyle={{
                 borderWidth: 2,
                 borderColor: 'white',
@@ -199,8 +203,7 @@ export default function Signin({navigation}) {
                 type="google"
                 onPress={() => onGoogleButtonPress()}
               />
-
-              <SocialIcon raised type="facebook" />
+              <SocialIcon raised type="facebook" onPress={()=>alert("Comming soon..")} />
             </View>
             <Text
               style={{

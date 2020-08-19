@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const image = require('../../assets/back.png');
+const image = require('../../assets/home2.png');
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -37,6 +37,7 @@ export default function Home({navigation}) {
           padding: 4,
         }}>
         <Button
+          raised
           title="Sign In"
           titleStyle={{
             color: 'white',
@@ -44,9 +45,7 @@ export default function Home({navigation}) {
             fontSize: 20,
           }}
           buttonStyle={{
-            backgroundColor: 'transparent',
-            borderWidth: 1,
-            borderColor: '#FF8066',
+            backgroundColor: '#FF8001',
             width: 200,
             borderRadius: 30,
             height: 50,
@@ -58,9 +57,8 @@ export default function Home({navigation}) {
         />
         <View style={{height: 2}}></View>
         <Button
+          raised
           title="Sign Up"
-          type="clear"
-          onPress={() => navigation.navigate('Sign Up')}
           titleStyle={{
             color: 'white',
             fontFamily: 'Roboto',
@@ -68,15 +66,14 @@ export default function Home({navigation}) {
           }}
           buttonStyle={{
             backgroundColor: '#0BBD00',
-            opacity: 0.8,
-            borderRadius: 30,
             width: 200,
+            borderRadius: 30,
             height: 50,
-            elevation: 2,
           }}
           icon={
             <Icon style={{padding: 5}} name="user" size={20} color="white" />
           }
+          onPress={() => navigation.navigate('Sign Up')}
         />
       </View>
     </SafeAreaView>
@@ -98,9 +95,9 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: windowWidth,
-    resizeMode: 'contain',
-    height: windowHeight - 50 * 1.2,
-    transform: [{translateY: -20}],
+    resizeMode: 'cover',
+    height: windowHeight - 50 * 1,
+    transform: [{scale: 0.7}, {translateY: 5}, {translateX: -15}],
   },
   ActionCard: {
     flex: 1,

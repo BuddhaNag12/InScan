@@ -105,6 +105,8 @@ export default function Signup({navigation}) {
               leftIcon={<Icon name="person" size={15} color="red" />}
             /> */}
             <Input
+              autoCapitalize="none"
+              autoCompleteType="email"
               ref={emailField}
               inputContainerStyle={{
                 ...signUpStyle.inputStyle,
@@ -120,6 +122,8 @@ export default function Signup({navigation}) {
               onChangeText={(val) => setEmail(val)}
             />
             <Input
+              autoCompleteType="password"
+              autoCapitalize="none"
               ref={passwordField}
               inputContainerStyle={{
                 ...signUpStyle.inputStyle,
@@ -136,6 +140,8 @@ export default function Signup({navigation}) {
               onChangeText={(val) => setPass(val)}
             />
             <Input
+             autoCompleteType="password"
+             autoCapitalize="none"
               ref={confirmPasswordField}
               inputContainerStyle={{
                 ...signUpStyle.inputStyle,

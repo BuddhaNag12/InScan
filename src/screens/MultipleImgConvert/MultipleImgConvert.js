@@ -26,6 +26,7 @@ const ImageGrid = ({navigation}) => {
   const [photos, setPhotos] = React.useState([]);
   const [imgUri, selectedImageUri] = React.useState([]);
   const [sel, setSel] = React.useState(false);
+  const [selIdx, setSelIdx] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
   const hasAndroidPermission = async () => {
@@ -47,6 +48,7 @@ const ImageGrid = ({navigation}) => {
   const reset = () => {
     selectedImageUri([]);
     setSel(false);
+    setSelIdx([])
   };
   const convertMultipleImage = async () => {
     setLoading(true);
@@ -101,8 +103,9 @@ const ImageGrid = ({navigation}) => {
       });
   }, []);
 
-  const selectedImage = (uri) => {
+  const selectedImage = (uri,newIdx) => {
     setSel(true);
+    setSelIdx((index)=>[...index,newIdx])
     selectedImageUri((imgUri) => [...imgUri, uri]);
   };
   if (loading) {
@@ -131,11 +134,12 @@ const ImageGrid = ({navigation}) => {
         <FlatList
           data={photos}
           keyExtractor={(_, index) => index}
-          numColumns={3}
+          numColumns={5}
           renderItem={({item, index}) => (
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <TouchableOpacity
+                disabled={selIdx[index]==index?true:false}
                 onPress={() =>
                   sel
                     ? selectedImage(item.node.image.uri, index)
@@ -152,6 +156,7 @@ const ImageGrid = ({navigation}) => {
                     borderColor: 'white',
                     resizeMode: 'cover',
                     margin: 8,
+                    opacity:selIdx[index]==index ? 0.2 :1,
                   }}
                 />
               </TouchableOpacity>

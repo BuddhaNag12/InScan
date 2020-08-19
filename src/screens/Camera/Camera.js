@@ -396,18 +396,18 @@ function CameraView({navigation}) {
                     <TouchableOpacity
                       style={{
                         borderBottomColor: borderBottomColorOcr,
-                        borderBottomWidth: 1,
+                        borderBottomWidth: 2,
                       }}
                       onPress={() => ToggleCopyText()}>
-                      <Text>Copy text</Text>
+                      <Text style={{fontFamily:"Roboto"}}>Copy text</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{
                         borderBottomColor: borderBottomColorDocMode,
-                        borderBottomWidth: 1,
+                        borderBottomWidth: 2,
                       }}
                       onPress={() => ToggleDocumentScanner()}>
-                      <Text>Document Scanner</Text>
+                      <Text style={{fontFamily:"Roboto"}}>Document Scanner</Text>
                     </TouchableOpacity>
                   </View>
                   <View
