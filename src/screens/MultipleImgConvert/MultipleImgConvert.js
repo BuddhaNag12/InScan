@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     padding: 3,
   },
 });
-
+let opacity = 1;
 const ImageGrid = ({navigation}) => {
   const [photos, setPhotos] = React.useState([]);
   const [imgUri, selectedImageUri] = React.useState([]);
   const [sel, setSel] = React.useState(false);
-  const [selIdx, setSelIdx] = React.useState([]);
+  const [selUris, setSelUris] = React.useState({});
   const [loading, setLoading] = React.useState(false);
 
   const hasAndroidPermission = async () => {
@@ -48,7 +48,7 @@ const ImageGrid = ({navigation}) => {
   const reset = () => {
     selectedImageUri([]);
     setSel(false);
-    setSelIdx([])
+    //setSelIdx([]);
   };
   const convertMultipleImage = async () => {
     setLoading(true);
@@ -103,10 +103,15 @@ const ImageGrid = ({navigation}) => {
       });
   }, []);
 
-  const selectedImage = (uri,newIdx) => {
+  const selectedImage = (uri) => {
     setSel(true);
-    setSelIdx((index)=>[...index,newIdx])
     selectedImageUri((imgUri) => [...imgUri, uri]);
+  };
+
+  // TOdo deselect image
+  const DeSelectImage = (index) => {
+    // setSel(true);
+    // selectedImageUri((imgUri) => [...imgUri, uri]);
   };
   if (loading) {
     return (
@@ -128,24 +133,46 @@ const ImageGrid = ({navigation}) => {
           <Animatable.Text
             animation="fadeInRight"
             style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-            Hold on any photo to enable multiple selection
+            Hold on or click any photo to enable multiple selection
           </Animatable.Text>
         )}
         <FlatList
           data={photos}
           keyExtractor={(_, index) => index}
-          numColumns={5}
+          numColumns={4}
           renderItem={({item, index}) => (
             <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <TouchableOpacity
-                disabled={selIdx[index]==index?true:false}
-                onPress={() =>
-                  sel
-                    ? selectedImage(item.node.image.uri, index)
-                    : openPreview(item.node.image.uri)
-                }
+                disabled={imgUri.find((i) =>
+                  i == item.node.image.uri ? true : false,
+                )}
+                activeOpacity={0.2}
+                onPress={() => selectedImage(item.node.image.uri, index)}
                 onLongPress={() => selectedImage(item.node.image.uri, index)}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    zIndex: 100,
+                    paddingHorizontal: 40,
+                    paddingVertical: 45,
+                  }}>
+                  {imgUri.find((i) => i == item.node.image.uri) ? (
+                    <TouchableOpacity style={{width: 30, height: 30}}>
+                      <Icon
+                        name="checkmark"
+                        size={25}
+                        type="ionicon"
+                        color="#C34A36"
+                        onPress={() => console.log('pressed')}
+                      />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
                 <Image
                   source={{uri: item.node.image.uri}} // Use item to set the image source
                   key={index} // Important to set a key for list items
@@ -156,7 +183,9 @@ const ImageGrid = ({navigation}) => {
                     borderColor: 'white',
                     resizeMode: 'cover',
                     margin: 8,
-                    opacity:selIdx[index]==index ? 0.2 :1,
+                    opacity: imgUri.find((i) => i == item.node.image.uri)
+                      ? 0.4
+                      : 1,
                   }}
                 />
               </TouchableOpacity>
@@ -180,25 +209,28 @@ const ImageGrid = ({navigation}) => {
             keyExtractor={(_, index) => index}
             numColumns={4}
             renderItem={({item, index}) => (
-              <View
+              <Animatable.View
+                animation="bounceIn"
                 style={{
                   flex: 1,
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Image
-                  source={{uri: item}} // Use item to set the image source
-                  key={index} // Important to set a key for list items
-                  style={{
-                    width: 100,
-                    height: 100,
-                    borderWidth: 3,
-                    borderColor: 'white',
-                    resizeMode: 'cover',
-                    margin: 10,
-                  }}
-                />
-              </View>
+                <TouchableOpacity onPress={() => openPreview(item)}>
+                  <Image
+                    source={{uri: item}} // Use item to set the image source
+                    key={index} // Important to set a key for list items
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderWidth: 3,
+                      borderColor: 'white',
+                      resizeMode: 'cover',
+                      margin: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+              </Animatable.View>
             )}
           />
 
@@ -208,6 +240,8 @@ const ImageGrid = ({navigation}) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: 3,
+                flex: 0.5,
+                flexDirection: 'row',
               }}>
               <Button
                 raised
