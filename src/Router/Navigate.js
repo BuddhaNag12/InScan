@@ -42,13 +42,10 @@ function DrawerNavigator() {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}
       drawerPosition="left"
-      drawerType="back"
-      minSwipeDistance={10}
-      overlayColor="rgba(222,80,0,0.2)"
-      drawerStyle={{
-        backgroundColor: '#EAFFFE',
-        width: windowWidth / 2 + 80,
-      }}>
+      drawerType="front"
+      initialRouteName="Dashboard"
+      overlayColor="rgba(222,80,0,0.2)"   
+      >
       <Drawer.Screen name="Dashboard" component={Dashboard} />
       <Drawer.Screen name="Gallery" component={MyGallery} />
       <Drawer.Screen name="Help" component={HelpScreen} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Dimensions, View, Text} from 'react-native';
+import {StyleSheet, Dimensions, View} from 'react-native';
 import Pdf from 'react-native-pdf';
 import DocumentHeader from '../../components/DocumentHeader';
 import PdfContext from '../../components/context';
