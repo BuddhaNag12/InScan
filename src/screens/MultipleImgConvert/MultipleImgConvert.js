@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  FlatList,
-  TouchableOpacity,
   View,
   PermissionsAndroid,
   Platform,
@@ -9,9 +7,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   ToastAndroid,
-  ScrollView,
 } from 'react-native';
-import {Image, Text, Icon} from 'react-native-elements';
+import BottomBar from '../../components/ButtomBar';
+import ListView from '../../components/ListViewEditedImages';
+
+import {Text, Button, Overlay} from 'react-native-elements';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import Share from 'react-native-share';
@@ -22,11 +22,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  BottomText: {
-    textAlign: 'center',
-    fontFamily: 'Roboto',
-    fontSize: 15,
-  },
 });
 
 const ImageGrid = ({navigation}) => {
@@ -34,7 +29,11 @@ const ImageGrid = ({navigation}) => {
   const [imgUri, selectedImageUri] = React.useState([]);
   const [sel, setSel] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
 
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
   React.useEffect(() => {
     if (Platform.OS === 'android' && !hasAndroidPermission()) {
       return;
@@ -80,7 +79,7 @@ const ImageGrid = ({navigation}) => {
       urls: imgUri,
     };
     Share.open(shareOptions)
-      .then((res) => {
+      .then(() => {
         ToastAndroid.showWithGravityAndOffset(
           'Files shared...',
           ToastAndroid.LONG,
@@ -89,7 +88,7 @@ const ImageGrid = ({navigation}) => {
           50,
         );
       })
-      .catch((e) => {
+      .catch(() => {
         ToastAndroid.showWithGravityAndOffset(
           'Cancelled ',
           ToastAndroid.LONG,
@@ -105,6 +104,7 @@ const ImageGrid = ({navigation}) => {
     setLoading(true);
     CameraRoll.deletePhotos(imgUri)
       .then(() => {
+        setVisible(false);
         ToastAndroid.showWithGravityAndOffset(
           'Deleted',
           ToastAndroid.LONG,
@@ -197,24 +197,64 @@ const ImageGrid = ({navigation}) => {
       </View>
     );
   }
+
+  const OverlayView = () => {
+    return (
+      <Overlay
+        animationType="fade"
+        isVisible={visible}
+        onBackdropPress={toggleOverlay}>
+        <View style={{height: 60, width: 200, alignItems: 'center'}}>
+          <Text style={{color: 'black', fontFamily: 'Roboto'}}>
+            Are you sure u want to Delete ?
+          </Text>
+          <View style={{padding: 10}}>
+            <Button
+              raised
+              buttonStyle={{
+                backgroundColor: 'transparent',
+                borderWidth: 1,
+                borderColor: 'red',
+              }}
+              titleStyle={{color: 'red', fontFamily: 'Roboto'}}
+              title="Delete"
+              onPress={() => deletePhoto()}
+            />
+          </View>
+        </View>
+      </Overlay>
+    );
+  };
   return (
     <View style={{...styles.container}}>
-      <View style={{paddingRight: 10}}>
-        {sel ? (
-          <Animatable.Text
-            animation="fadeInRight"
-            style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-            Multiple Image select clink on photos to select each of them
-          </Animatable.Text>
-        ) : (
-          <Animatable.Text
-            animation="fadeInRight"
-            style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-            Hold on or click any photo to enable multiple selection
-          </Animatable.Text>
-        )}
-      </View>
-      <View style={{flex: 1, height: height / 2 + 100, width: (width>height) ? height : width}}>
+      <OverlayView />
+      {photos.length > 0 ? (
+        <View style={{paddingRight: 10}}>
+          {sel ? (
+            <Animatable.Text
+              animation="fadeInRight"
+              style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+              Multiple Image select clink on photos to select each of them
+            </Animatable.Text>
+          ) : (
+            <Animatable.Text
+              animation="fadeInRight"
+              style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+              Hold on or click any photo to enable multiple selection
+            </Animatable.Text>
+          )}
+        </View>
+      ) : (
+        <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
+          No Images
+        </Text>
+      )}
+      <View
+        style={{
+          flex: 1,
+          height: height / 2 + 100,
+          width: width > height ? height : width,
+        }}>
         <ListView
           photos={photos}
           selectedImage={selectedImage}
@@ -228,14 +268,14 @@ const ImageGrid = ({navigation}) => {
           style={{
             paddingRight: 10,
             justifyContent: 'flex-end',
-            width: (width>height) ? height : width
+            width: width > height ? height : width,
           }}>
           {imgUri.length ? (
             <BottomBar
               convertMultipleImage={convertMultipleImage}
               reset={reset}
               loading={loading}
-              deletePhoto={deletePhoto}
+              deletePhoto={toggleOverlay}
               sharePhotos={SharePhotos}
             />
           ) : (
@@ -251,132 +291,6 @@ const ImageGrid = ({navigation}) => {
   );
 };
 
-const ListView = ({photos, selectedImage, DeSelectImage, imgUri,openPreview}) => {
-  return (
-    <FlatList
-      data={photos}
-      keyExtractor={(_, index) => index.toString()}
-      numColumns={3}
-      scrollEnabled={true}
-      renderItem={({item, index}) => (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-          }}>
-          <TouchableOpacity
-            disabled={imgUri.find((i) =>
-              i == item.node.image.uri ? true : false,
-            )}
-            activeOpacity={0.2}
-            onPress={() => selectedImage(item.node.image.uri, index)}
-            onLongPress={() => selectedImage(item.node.image.uri, index)}>
-            <View
-              style={{
-                position: 'absolute',
-                zIndex: 100,
-                left:"40%",
-                top:"40%"
-              }}>
-              {imgUri.find((i) => i == item.node.image.uri) ? (
-                <TouchableOpacity style={{width: 30, height: 30}}>
-                  <Icon
-                    name="checkmark-outline"
-                    size={28}
-                    type="ionicon"
-                    color="#C34A36"
-                    onPress={() => DeSelectImage(item.node.image.uri)}
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-            <View
-              style={{
-                position: 'absolute',
-                zIndex: 100,
-                left:"10%",
-                top:"70%"
-              }}>
-              {imgUri.find((i) => i == item.node.image.uri) ? (
-                <TouchableOpacity style={{width: 30, height: 30}}>
-                  <Icon
-                    name="eye-outline"
-                    size={22}
-                    type="ionicon"
-                    color="#C34A36"
-                    onPress={() => openPreview( item.node.image.uri)}
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-            <Image
-              source={{uri: item.node.image.uri}} // Use item to set the image source
-              key={index} // Important to set a key for list items
-              style={{
-                width: 120,
-                height: 120,
-                borderWidth: 3,
-                borderColor: 'white',
-                resizeMode: 'cover',
-                margin: 8,
-                opacity: imgUri.find((i) => i == item.node.image.uri) ? 0.4 : 1,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      )}
-    />
-  );
-};
-const BottomBar = ({convertMultipleImage, reset, deletePhoto, sharePhotos}) => {
-  return (
-    <Animatable.View
-      animation="slideInUp"
-      easing="ease-in"
-      duration={600}
-      style={{
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: '#DFE0DF',
-        width: width,
-        height: 100,
-      }}>
-      <TouchableOpacity onPress={() => convertMultipleImage()}>
-        <Icon
-          raised
-          name="document-attach-outline"
-          type="ionicon"
-          color="#FF5D5D"
-        />
-        <Text style={styles.BottomText}>Export</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => deletePhoto()}>
-        <Icon raised name="trash-outline" type="ionicon" color="#FF5D5D" />
-        <Text style={styles.BottomText}>Delete</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => sharePhotos()}>
-        <Icon
-          raised
-          name="share-social-outline"
-          type="ionicon"
-          color="#FF5D5D"
-        />
-        <Text style={styles.BottomText}>Share</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => reset()}>
-        <Icon
-          raised
-          name="remove-circle-outline"
-          type="ionicon"
-          color="#FF5D5D"
-        />
-        <Text style={styles.BottomText}>Reset</Text>
-      </TouchableOpacity>
-    </Animatable.View>
-  );
-};
-
 export default class MultipleImgConvert extends React.Component {
   render() {
     return (
@@ -386,43 +300,3 @@ export default class MultipleImgConvert extends React.Component {
     );
   }
 }
-
-// {sel ? (
-//   <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-//     selected Images
-//   </Text>
-// ) : (
-//   <Text style={{textAlign: 'center', fontFamily: 'Roboto'}}>
-//     Selected image will show here...
-//   </Text>
-// )}
-// <FlatList
-//   data={imgUri}
-//   horizontal
-//   keyExtractor={(_, index) => index.toString()}
-//   // numColumns={4}
-//   renderItem={({item, index}) => (
-//     <Animatable.View
-//       animation="bounceIn"
-//       style={{
-//         flex: 1,
-//         alignItems: 'flex-start',
-//         justifyContent: 'center',
-//       }}>
-//       <TouchableOpacity onPress={() => openPreview(item)}>
-//         <Image
-//           source={{uri: item}} // Use item to set the image source
-//           key={index} // Important to set a key for list items
-//           style={{
-//             width: 100,
-//             height: 100,
-//             borderWidth: 3,
-//             borderColor: 'white',
-//             resizeMode: 'cover',
-//             margin: 10,
-//           }}
-//         />
-//       </TouchableOpacity>
-//     </Animatable.View>
-//   )}
-// />

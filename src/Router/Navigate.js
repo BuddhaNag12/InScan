@@ -34,18 +34,26 @@ const Drawer = createDrawerNavigator();
 
 import {Dimensions} from 'react-native';
 
-const windowWidth = Dimensions.get('window').width;
-
 // Drawer Navigation screens
-function DrawerNavigator() {
+const DrawerNavigator = () => {
+  const [initRender, setInitRender] = useState(true);
+  useEffect(() => {
+    setInitRender(false);
+  }, [initRender]);
+
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawer {...props} />}
+      drawerContent={(props) => {
+        return <CustomDrawer {...props} />;
+      }}
       drawerPosition="left"
       drawerType="front"
       initialRouteName="Dashboard"
-      overlayColor="rgba(222,80,0,0.2)"   
-      >
+      overlayColor="rgba(222,80,0,0.2)"
+      drawerStyle={{
+        width: initRender ? null : Dimensions.get('window').width / 2 + 80,
+      }}
+      edgeWidth={100}>
       <Drawer.Screen name="Dashboard" component={Dashboard} />
       <Drawer.Screen name="Gallery" component={MyGallery} />
       <Drawer.Screen name="Help" component={HelpScreen} />
@@ -54,7 +62,7 @@ function DrawerNavigator() {
       <Drawer.Screen name="Documents" component={DocumentList} />
     </Drawer.Navigator>
   );
-}
+};
 // Initial Screen stack navigation
 export default function App({navigation}) {
   const [initializing, setInitializing] = useState(true);
@@ -90,7 +98,7 @@ export default function App({navigation}) {
               options={{
                 headerTitle: (props) => <SignInTitle {...props} />,
                 headerStyle: {
-                  backgroundColor: '#f4511e',
+                  backgroundColor: '#FF7772',
                   opacity: 0.8,
                 },
                 headerTintColor: 'white',
@@ -102,8 +110,7 @@ export default function App({navigation}) {
               options={{
                 headerTitle: (props) => <SignUpTitle {...props} />,
                 headerStyle: {
-                  backgroundColor: '#f4511e',
-                  opacity: 0.8,
+                  backgroundColor: '#FF7772',
                 },
                 headerTintColor: '#fff',
               }}
@@ -129,8 +136,7 @@ export default function App({navigation}) {
               options={{
                 headerTitle: (props) => <MultipleEditingTitle {...props} />,
                 headerStyle: {
-                  backgroundColor: '#f4511e',
-                  opacity: 0.8,
+                  backgroundColor: '#FF7772',
                 },
                 headerTintColor: 'white',
               }}

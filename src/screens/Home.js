@@ -7,9 +7,11 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const image = require('../../assets/home2.png');
+const icon = require('../../assets/icon.png');
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,12 +22,12 @@ export default function Home({navigation}) {
       <Header
         containerStyle={{
           borderBottomColor: 'transparent',
-          elevation: 5,
-          backgroundColor: '#F46049',
-          opacity: 1,
+          elevation: 3,
+          backgroundColor: '#FF7772',
         }}
         centerComponent={
-          <Icon style={{padding: 5}} name="home" size={20} color="white" />
+          // <Icon style={{padding: 5}} name="home" size={20} color="white" />
+          <Image source={icon} style={{width: 40, height: 40}} />
         }
       />
       <ImageBackground source={image} style={styles.image} />
@@ -45,7 +47,7 @@ export default function Home({navigation}) {
             fontSize: 20,
           }}
           buttonStyle={{
-            backgroundColor: '#FF8001',
+            backgroundColor: '#FF7772',
             width: 200,
             borderRadius: 30,
             height: 50,

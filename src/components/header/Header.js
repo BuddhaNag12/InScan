@@ -1,11 +1,11 @@
 import React from 'react';
 import {Header, Text} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {TouchableOpacity, StatusBar} from 'react-native';
+import {TouchableOpacity, StatusBar,View} from 'react-native';
 
 const MyHeader = ({navigation}) => {
   return (
-    <>
+    <View >
       <StatusBar backgroundColor="#FF7772" barStyle="light-content" />
       <Header
         containerStyle={{
@@ -25,7 +25,7 @@ const MyHeader = ({navigation}) => {
           </Text>
         }
       />
-    </>
+    </View>
   );
 };
 

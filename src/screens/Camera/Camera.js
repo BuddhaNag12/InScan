@@ -246,7 +246,7 @@ function CameraView({navigation}) {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden />
+      <StatusBar hidden showHideTransition="fade" />
       {loading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator size="large" color="red" />
