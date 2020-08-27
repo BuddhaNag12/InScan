@@ -1,9 +1,8 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {TouchableOpacity, StyleSheet, Dimensions,View} from 'react-native';
 import {Text, Icon} from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 const {width} = Dimensions.get('window');
-
 
 const styles = StyleSheet.create({
   BottomText: {
@@ -21,7 +20,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const BottomBar = ({convertMultipleImage, reset, deletePhoto, sharePhotos}) => {
+const BottomBar = ({
+  convertMultipleImage,
+  reset,
+  deletePhoto,
+  sharePhotos,
+  ocrScan,
+}) => {
   return (
     <Animatable.View
       animation="fadeInUp"
@@ -40,10 +45,13 @@ const BottomBar = ({convertMultipleImage, reset, deletePhoto, sharePhotos}) => {
         <Text style={styles.BottomText}>Export</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => deletePhoto()}>
-        <Icon raised name="trash-outline" type="ionicon" color="#FF5D5D" />
-        <Text style={styles.BottomText}>Delete</Text>
+        <View>
+          <Icon raised name="trash-outline" type="ionicon" color="#FF5D5D" />
+          <Text style={styles.BottomText}>Delete</Text>
+        </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => sharePhotos()}>
+        <View>
         <Icon
           raised
           name="share-social-outline"
@@ -51,15 +59,24 @@ const BottomBar = ({convertMultipleImage, reset, deletePhoto, sharePhotos}) => {
           color="#FF5D5D"
         />
         <Text style={styles.BottomText}>Share</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => console.log('todo')}>
+        <View>
+        <Icon raised name="text-outline" type="ionicon" color="#FF5D5D" />
+        <Text style={styles.BottomText}>Extract Text</Text>
+        </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => reset()}>
-        <Icon
+       <View>
+       <Icon
           raised
           name="remove-circle-outline"
           type="ionicon"
           color="#FF5D5D"
         />
         <Text style={styles.BottomText}>Reset</Text>
+       </View>
       </TouchableOpacity>
     </Animatable.View>
   );

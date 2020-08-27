@@ -5,7 +5,6 @@ import auth from '@react-native-firebase/auth';
 import {
   SignInTitle,
   SignUpTitle,
-  MultipleEditingTitle,
 } from '../components/HeaderTitle';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -19,14 +18,13 @@ import Signin from '../screens/Auth/SignIn';
 import Singup from '../screens/Auth/SignUp';
 import Preview from '../screens/Preview';
 import OcrText from '../screens/OcrText';
-import MultipleImgConvert from '../screens/MultipleImgConvert/MultipleImgConvert';
-import EditedPhotos from '../screens/EditedPhotos/EditedPhotos';
+import DocumentView from '../screens/DocumentView';
 //drawers
 import CustomDrawer from '../screens/drawers/drawerLayout/CustumDrawer';
+import MultipleImgConvert from '../screens/drawers/MultipleImgConvert';
 import HelpScreen from '../screens/drawers/Help';
 import AboutScreen from '../screens/drawers/About';
 import MyGallery from '../screens/drawers/Gallery';
-import DocumentView from '../screens/drawers/DocumentView';
 import DocumentList from '../screens/drawers/documentList';
 
 const Stack = createStackNavigator();
@@ -58,7 +56,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="Gallery" component={MyGallery} />
       <Drawer.Screen name="Help" component={HelpScreen} />
       <Drawer.Screen name="About" component={AboutScreen} />
-      <Drawer.Screen name="Edited Documents" component={EditedPhotos} />
+      <Drawer.Screen name="Edited" component={MultipleImgConvert} />
       <Drawer.Screen name="Documents" component={DocumentList} />
     </Drawer.Navigator>
   );
@@ -99,7 +97,6 @@ export default function App({navigation}) {
                 headerTitle: (props) => <SignInTitle {...props} />,
                 headerStyle: {
                   backgroundColor: '#FF7772',
-                  opacity: 0.8,
                 },
                 headerTintColor: 'white',
               }}
@@ -130,17 +127,6 @@ export default function App({navigation}) {
             />
             <Stack.Screen name="Preview" component={Preview} />
 
-            <Stack.Screen
-              name="Convert"
-              component={MultipleImgConvert}
-              options={{
-                headerTitle: (props) => <MultipleEditingTitle {...props} />,
-                headerStyle: {
-                  backgroundColor: '#FF7772',
-                },
-                headerTintColor: 'white',
-              }}
-            />
             <Stack.Screen
               name="Document"
               component={DocumentView}

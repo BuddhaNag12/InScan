@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  StatusBar,
   StyleSheet,
   View,
   Text,
@@ -16,10 +15,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headingImg: {
-    flex:1,
-    justifyContent: 'center',
-  },
+
   content: {
     flex: 1,
     padding: 2,
@@ -32,21 +28,20 @@ const styles = StyleSheet.create({
   },
   headingText: {
     justifyContent: 'center',
-    alignItems: 'center',
     marginVertical: 4,
-    elevation: 3,
+    elevation: 1,
     backgroundColor: '#FF8066',
     borderRadius: 20,
     padding: 2,
   },
 
   info: {
-    textAlign: "auto",
+    textAlign: "left",
     fontFamily: 'Roboto',
     fontSize: 18,
     textTransform: 'capitalize',
-    color:"black",
-    letterSpacing:0.4,
+    color: 'black',
+    letterSpacing: 0.4,
   },
   helpArea: {
     marginVertical: 4,
@@ -65,7 +60,7 @@ const Images = require('../../../assets/help.png');
 
 const HeadingImg = () => {
   return (
-    <View style={{...styles.headingImg}}>
+    <View >
       <Image
         source={Images}
         style={{
@@ -92,16 +87,15 @@ const ContextView = () => {
         <Text style={{...styles.info}}> * Navigate to edited images</Text>
         <Text style={{...styles.info}}>
           {' '}
-          * Click on convert pdf to convert single pdf
+          * Click on convert pdf to convert pdf
         </Text>
         <View style={{...styles.headingText}}>
           <Text style={{...styles.h2}}>multiple image into pdf : </Text>
         </View>
         <Text style={{...styles.info}}> * Navigate to Edited Images</Text>
-        <Text style={{...styles.info}}> * click on multiple image convert</Text>
         <Text style={{...styles.info}}>
           {' '}
-          * hold each image to select multiple image
+          * click on each images to convert multiple images
         </Text>
         <Text style={{...styles.info}}> * click pdf icon</Text>
         <Text style={{...styles.info}}> * to reset click reset button</Text>

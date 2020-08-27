@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import BottomBar from '../../components/ButtomBar';
 import ListView from '../../components/ListViewEditedImages';
-
+import vision from '@react-native-firebase/ml-vision';
 import {Text, Button, Overlay} from 'react-native-elements';
 import CameraRoll from '@react-native-community/cameraroll';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import Share from 'react-native-share';
+import MyHeader from '../../components/header/Header';
 
 const {height, width} = Dimensions.get('window');
 import * as Animatable from 'react-native-animatable';
@@ -29,16 +30,34 @@ const ImageGrid = ({navigation}) => {
   const [imgUri, selectedImageUri] = React.useState([]);
   const [sel, setSel] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [OcrLoading, setOcrLoading] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
+  const hasAndroidPermission = async () => {
+    const permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
   };
+
   React.useEffect(() => {
-    if (Platform.OS === 'android' && !hasAndroidPermission()) {
+    const unsubscribe = navigation.addListener('focus', () => {
+      handleButtonPress();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  async function handleButtonPress() {
+    setLoading(true);
+
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
       return;
     }
-    setLoading(true);
+
     CameraRoll.getPhotos({
       first: 20,
       assetType: 'Photos',
@@ -53,16 +72,49 @@ const ImageGrid = ({navigation}) => {
         setLoading(false);
         console.log(err);
       });
-  }, []);
+  }
 
-  const hasAndroidPermission = async () => {
-    const permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
-    const hasPermission = await PermissionsAndroid.check(permission);
-    if (hasPermission) {
-      return true;
+  const ocrScan = async (localPath) => {
+    setOcrLoading(true);
+    const processed = await vision().textRecognizerProcessImage(localPath);
+    let textIsFound;
+    processed.blocks.forEach((block) => {
+      // console.log('Found block with text: ', block.text);
+      // console.log('Confidence in block: ', block.confidence);
+      if (block.text) {
+        textIsFound = true;
+        navigation.navigate('OCR TEXT', {
+          text: processed.text,
+        });
+      } else {
+        textIsFound = false;
+      }
+      //console.log('Languages found in block: ', block.recognizedLanguages);
+    });
+    if (!textIsFound) {
+      setOcrLoading(false);
+      ToastAndroid.showWithGravityAndOffset(
+        'Text Not Found',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    } else {
+      setOcrLoading(false);
+      ToastAndroid.showWithGravityAndOffset(
+        'Text Found',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
     }
-    const status = await PermissionsAndroid.request(permission);
-    return status === 'granted';
+    return processed.text;
+  };
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
   };
 
   const openPreview = (imgPath) => {
@@ -197,7 +249,19 @@ const ImageGrid = ({navigation}) => {
       </View>
     );
   }
-
+  if (OcrLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="red" />
+        <Animatable.Text
+          animation="swing"
+          iterationCount="infinite"
+          style={{fontSize: 20, color: 'black'}}>
+          Hold on we're fetchig text...
+        </Animatable.Text>
+      </View>
+    );
+  }
   const OverlayView = () => {
     return (
       <Overlay
@@ -227,6 +291,7 @@ const ImageGrid = ({navigation}) => {
   };
   return (
     <View style={{...styles.container}}>
+      <MyHeader navigation={navigation} />
       <OverlayView />
       {photos.length > 0 ? (
         <View style={{paddingRight: 10}}>
@@ -261,6 +326,7 @@ const ImageGrid = ({navigation}) => {
           DeSelectImage={DeSelectImage}
           imgUri={imgUri}
           openPreview={openPreview}
+          ocrScan={ocrScan}
         />
       </View>
       {imgUri.length ? (
@@ -277,6 +343,7 @@ const ImageGrid = ({navigation}) => {
               loading={loading}
               deletePhoto={toggleOverlay}
               sharePhotos={SharePhotos}
+              ocrScan={ocrScan}
             />
           ) : (
             <></>

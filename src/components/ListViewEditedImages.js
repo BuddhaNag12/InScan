@@ -5,7 +5,7 @@ import {
   Dimensions,
   FlatList,
   View,
-  Image
+  Image,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
@@ -15,6 +15,7 @@ const ListView = ({
   DeSelectImage,
   imgUri,
   openPreview,
+  ocrScan
 }) => {
   return (
     <FlatList
@@ -46,10 +47,29 @@ const ListView = ({
                 <TouchableOpacity style={{width: 30, height: 30}}>
                   <Icon
                     name="checkmark-outline"
-                    size={28}
+                    size={25}
                     type="ionicon"
                     color="#C34A36"
                     onPress={() => DeSelectImage(item.node.image.uri)}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
+            <View
+              style={{
+                position: 'absolute',
+                zIndex: 100,
+                left: '70%',
+                top: '10%',
+              }}>
+              {imgUri.find((i) => i == item.node.image.uri) ? (
+                <TouchableOpacity style={{width: 30, height: 30}}>
+                  <Icon
+                    name="text-outline"
+                    size={20}
+                    type="ionicon"
+                    color="white"
+                    onPress={() => ocrScan(item.node.image.uri)}
                   />
                 </TouchableOpacity>
               ) : null}
@@ -64,10 +84,10 @@ const ListView = ({
               {imgUri.find((i) => i == item.node.image.uri) ? (
                 <TouchableOpacity style={{width: 30, height: 30}}>
                   <Icon
-                    name="eye-outline"
-                    size={22}
+                    name="expand-outline"
+                    size={20}
                     type="ionicon"
-                    color="#C34A36"
+                    color="white"
                     onPress={() => openPreview(item.node.image.uri)}
                   />
                 </TouchableOpacity>

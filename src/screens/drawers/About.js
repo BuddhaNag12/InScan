@@ -12,7 +12,7 @@ import MyHeader from '../../components/header/Header';
 
 import {Avatar, Icon} from 'react-native-elements';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     width: width,
     height: 400,
     right: 2,
-    transform: [{scale: 1.1}, {translateY: -15}],
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
   headingWrapper: {
     marginVertical: 4,
@@ -45,7 +44,7 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   h1: {
-    textTransform:"capitalize",
+    textTransform: 'capitalize',
     textAlign: 'left',
     fontFamily: 'Roboto',
     fontSize: 20,
@@ -74,7 +73,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   aboutWrapper: {
-    width: width - 20,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -104,6 +102,27 @@ const styles = StyleSheet.create({
 });
 
 const imgUrl = require('../../../assets/about.png');
+
+export default function AboutScreen({navigation}) {
+  return (
+    <ScrollView>
+      <MyHeader navigation={navigation} />
+      <View>
+        <View style={{...styles.container}}>
+          <ImageHeading />
+          <AboutMeAvatar />
+          <View style={{...styles.content}}>
+            <Text style={{...styles.h1}}>Quick Summary :</Text>
+            <SummeryText />
+            <LicenseDetails />
+            <ContactDetails />
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
+
 const ImageHeading = () => {
   return (
     <View style={{...styles.headingImg}}>
@@ -153,7 +172,12 @@ const SummeryText = () => {
         working on simultaneous projects on react native and vuejs
       </Text>
       <Text style={{...styles.summeryText}}>
-        Working under Krypto developers pvt ltd.
+        I'm very passionate and hard working guy love programing and coding all
+        day...
+      </Text>
+      <Text style={{...styles.summeryText}}>
+        I'm currently working and contributing to a private company i.e Working
+        under Krypto developers pvt ltd.
       </Text>
     </View>
   );
@@ -166,7 +190,7 @@ const LicenseDetails = () => {
           style={{
             ...styles.h1,
           }}>
-          License Details:
+          Project License Details:
         </Text>
         <Text
           style={{
@@ -238,22 +262,3 @@ const ContactDetails = () => {
     </View>
   );
 };
-export default function AboutScreen({navigation}) {
-  return (
-    <ScrollView>
-      <MyHeader navigation={navigation} />
-      <View>
-        <View style={{...styles.container}}>
-          <ImageHeading />
-          <AboutMeAvatar />
-          <View style={{...styles.content}}>
-            <Text style={{...styles.h1}}>Quick Summary :</Text>
-            <SummeryText />
-            <LicenseDetails />
-            <ContactDetails />
-          </View>
-        </View>
-      </View>
-    </ScrollView>
-  );
-}

@@ -185,13 +185,7 @@ export default function CustomDrawer(props) {
               title="Edited images"
               IconName="expand"
               navigation={props.navigation}
-              routeTo="Edited Documents"
-            />
-            <DrawerButtons
-              title="Multiple Image convert"
-              IconName="images"
-              navigation={props.navigation}
-              routeTo="Convert"
+              routeTo="Edited"
             />
             <DrawerButtons
               title="Documents"

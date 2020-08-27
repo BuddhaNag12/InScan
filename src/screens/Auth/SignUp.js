@@ -92,18 +92,6 @@ export default function Signup({navigation}) {
       <ScrollView>
         <View style={{...signUpStyle.box1}}>
           <View style={{...signUpStyle.SignUpForm}}>
-            {/* <Input
-              inputContainerStyle={{
-                ...signUpStyle.inputStyle,
-              }}
-              label="Full Name"
-              placeholder="Full Name"
-              placeholderTextColor={'grey'}
-              labelStyle={{color: 'black'}}
-              errorStyle={{color: 'red'}}
-              onChangeText={(val) => setName(val)}
-              leftIcon={<Icon name="person" size={15} color="red" />}
-            /> */}
             <Input
               autoCapitalize="none"
               autoCompleteType="email"
@@ -157,18 +145,7 @@ export default function Signup({navigation}) {
               errorMessage={passwordError}
               onChangeText={(val) => setConfirmpassword(val)}
             />
-            {/* <Input
-              inputContainerStyle={{
-                ...signUpStyle.inputStyle,
-              }}
-              leftIcon={<Icon name="call" size={15} color="red" />}
-              labelStyle={{color: 'black'}}
-              placeholderTextColor={'grey'}
-              label="Contact No"
-              placeholder="Contact No"
-              errorStyle={{color: 'red'}}
-              onChangeText={(val) => setPhone(val)}
-            /> */}
+
             <Button
               loading={loading}
               raised
@@ -200,7 +177,9 @@ export default function Signup({navigation}) {
             <Text style={{fontFamily: 'Roboto', padding: 2}}>
               Already Signed up ?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Sign In')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Sign In')}
+             style={{ width: '12%',borderBottomWidth:1,borderBottomColor:'black'}}
+            >
               <Text
                 style={{
                   textAlign: 'center',

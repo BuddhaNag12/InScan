@@ -8,6 +8,7 @@ const MyHeader = ({navigation}) => {
     <View >
       <StatusBar backgroundColor="#FF7772" barStyle="light-content" />
       <Header
+        
         containerStyle={{
           borderBottomColor: 'transparent',
           elevation: 5,

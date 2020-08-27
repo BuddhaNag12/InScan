@@ -87,22 +87,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  text: {
-    fontFamily: 'FontAwesome',
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
   image: {
     flex: 1,
     width: windowWidth,
-    resizeMode: 'cover',
-    height: windowHeight - 50 * 1,
+    height: windowHeight - 50,
     transform: [{scale: 0.7}, {translateY: 5}, {translateX: -15}],
-  },
-  ActionCard: {
-    flex: 1,
-    justifyContent: 'flex-end',
   },
 });

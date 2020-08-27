@@ -5,12 +5,13 @@ import {
   StatusBar,
   ToastAndroid,
   PermissionsAndroid,
-  Button,
+  Image,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import styles from './cameraStyles';
-import {Icon, Slider} from 'react-native-elements';
+import {Icon, Tooltip} from 'react-native-elements';
 import {RNCamera} from 'react-native-camera';
 import CameraRoll from '@react-native-community/cameraroll';
 import {Dimensions} from 'react-native';
@@ -18,7 +19,6 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RNImageToPdf from 'react-native-image-to-pdf';
 import * as Animatable from 'react-native-animatable';
 import vision from '@react-native-firebase/ml-vision';
-const windowHeight = Dimensions.get('window').height;
 
 export default function Camera({navigation}) {
   const isFocused = navigation.isFocused();
@@ -41,10 +41,12 @@ function CameraView({navigation}) {
   const [isWhiteBalance, setIsWhiteBal] = useState(false);
   const [isOcr, setOcrMode] = useState(false);
   const [isDocMode, setDocumentScanner] = useState(true);
+  const [ratio, setRatio] = useState();
+  const [imageSource, setSource] = useState();
   const [whiteBalance, setWhiteBal] = useState(
     RNCamera.Constants.WhiteBalance.auto,
   );
-
+  const [capuring, setCapturing] = useState(false);
   const borderBottomColorOcr = isOcr ? 'white' : 'transparent';
   const borderBottomColorDocMode = isDocMode ? 'white' : 'transparent';
   // Local path to file on the device
@@ -108,9 +110,12 @@ function CameraView({navigation}) {
         });
       });
     } else {
+      setCapturing(true);
       try {
         const options = {quality: 0.5, base64: true};
         const data = await CameraRef.current.takePictureAsync(options);
+        setSource(data.uri);
+        setCapturing(false);
         CameraRoll.save(data.uri, {type: 'photo', album: 'InScan'})
           .then(() => {
             setloading(false);
@@ -188,6 +193,7 @@ function CameraView({navigation}) {
 
   const toggleDrawer = () => {
     setDrawer(!drawer);
+    console.log('clicked');
   };
   const setZoom = () => {
     if (zoomLevel >= 1.0) {
@@ -244,9 +250,19 @@ function CameraView({navigation}) {
     setOcrMode(true);
   };
 
+  const prepareRatio = async () => {
+    if (Platform.OS === 'android' && Cam) {
+      const ratios = await Cam.getSupportedRatiosAsync();
+      const ratio =
+        ratios.find((ratio) => ratio === DESIRED_RATIO) ||
+        ratios[ratios.length - 1];
+
+      setRatio(ratio);
+    }
+  };
   return (
-    <View style={styles.container}>
-      <StatusBar hidden showHideTransition="fade" />
+    <View style={{...styles.container, opacity: capuring ? 0.5 : 1}}>
+      <StatusBar hidden />
       {loading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator size="large" color="red" />
@@ -259,6 +275,8 @@ function CameraView({navigation}) {
         </View>
       ) : (
         <RNCamera
+          onCameraReady={prepareRatio}
+          ratio={ratio}
           captureAudio={false}
           playSoundOnCapture={true}
           whiteBalance={whiteBalance}
@@ -279,15 +297,12 @@ function CameraView({navigation}) {
             if (status !== 'READY') return <PendingView />;
             else
               return (
-                <View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      padding: 4,
-                      height: windowHeight - 100,
-                    }}>
+                <View
+                  style={{
+                    opacity: 0.8,
+                    justifyContent: 'space-between',
+                  }}>
+                  <View style={styles.FabButton}>
                     <Icon
                       name="home-outline"
                       type="ionicon"
@@ -295,156 +310,21 @@ function CameraView({navigation}) {
                       color="white"
                       onPress={() => navigation.navigate('Dashboard')}
                     />
-                    <Icon
-                      name="menu-outline"
-                      type="ionicon"
-                      color="white"
-                      size={30}
-                      onPress={() => toggleDrawer()}
-                    />
-                    {drawer ? (
-                      <Animatable.View
-                        useNativeDriver
-                        animation="bounceInDown"
-                        duration={500}
-                        easing="ease-in"
-                        style={{
-                          ...styles.DrawerView,
-                        }}>
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Text style={{color: 'white', fontSize: 20}}>
-                            Under Development camera menu 0.1
-                          </Text>
-                        </View>
-                        <View style={{...styles.DrawerContainer}}>
-                          <Button
-                            title={`Zoom ${zoomLevel}`}
-                            onPress={() => setZoom()}
-                          />
-                          <Button
-                            title="whiteBalance"
-                            onPress={() => toggleWhiteBalance()}
-                          />
-                          <Button
-                            title="exposure"
-                            onPress={() => toggleExposure()}
-                          />
-                        </View>
-                        {isToggleExposure ? (
-                          <Animatable.View
-                            animation="bounceIn"
-                            style={{
-                              ...styles.whiteBalanceWrapper,
-                              marginVertical: 20,
-                              alignItems: 'stretch',
-                              justifyContent: 'center',
-                            }}>
-                            <Slider
-                              onValueChange={(val) => setExposure(val)}
-                              value={exposure}
-                              step={0.1}
-                              trackStyle={{
-                                height: 10,
-                                backgroundColor: 'transparent',
-                              }}
-                            />
-                            <Text style={{fontSize: 20, color: 'white'}}>
-                              Value: {exposure}
-                            </Text>
-                          </Animatable.View>
-                        ) : null}
-                        {isWhiteBalance ? (
-                          <Animatable.View
-                            animation="bounceIn"
-                            style={{
-                              ...styles.whiteBalanceWrapper,
-                            }}>
-                            <View
-                              style={{
-                                ...styles.whiteBalanceView,
-                              }}>
-                              <Button title="sunny" onPress={() => sunny()} />
-                              <Button title="cloudy" onPress={() => cloudy()} />
-                              <Button
-                                title="fluorescent"
-                                onPress={() => fluorescent()}
-                              />
-                              <Button
-                                title="incandescent"
-                                onPress={() => incandescent()}
-                              />
-                              <Button title="shadow" onPress={() => shadow()} />
-
-                              <Button
-                                title="default Mod"
-                                onPress={() => defaultMod()}
-                              />
-                            </View>
-                          </Animatable.View>
-                        ) : null}
-                      </Animatable.View>
-                    ) : null}
                   </View>
-                  <View
-                    style={{
-                      ...styles.aboveButtomNavigationView,
-                    }}>
-                    <TouchableOpacity
-                      style={{
-                        borderBottomColor: borderBottomColorOcr,
-                        borderBottomWidth: 2,
-                      }}
-                      onPress={() => ToggleCopyText()}>
-                      <Text style={{fontFamily:"Roboto"}}>Copy text</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        borderBottomColor: borderBottomColorDocMode,
-                        borderBottomWidth: 2,
-                      }}
-                      onPress={() => ToggleDocumentScanner()}>
-                      <Text style={{fontFamily:"Roboto"}}>Document Scanner</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      ...styles.buttomNavigationView,
-                    }}>
-                    <Icon
-                      name="images-outline"
-                      type="ionicon"
-                      size={40}
-                      color="white"
-                      onPress={() => navigation.navigate('Gallery')}
+                  <View>
+                    <AboveNavBarView
+                      ToggleDocumentScanner={ToggleDocumentScanner}
+                      ToggleCopyText={ToggleCopyText}
+                      borderBottomColorDocMode={borderBottomColorDocMode}
+                      borderBottomColorOcr={borderBottomColorOcr}
                     />
-                    <Icon
-                      name="camera-outline"
-                      type="ionicon"
-                      size={40}
-                      color="white"
-                      onPress={() => takePicture()}
-                    />
-                    <Icon
-                      name={
-                        flash == RNCamera.Constants.FlashMode.on
-                          ? 'flash-outline'
-                          : 'flash-off-outline'
-                      }
-                      size={40}
-                      type="ionicon"
-                      color="white"
-                      onPress={() => toggleFlash()}
-                    />
-                    <Icon
-                      name="image-outline"
-                      type="ionicon"
-                      size={40}
-                      color="white"
-                      onPress={() => openImagePicker()}
+                    <ButtomNavigationView
+                      navigation={navigation}
+                      takePicture={takePicture}
+                      toggleFlash={toggleFlash}
+                      openImagePicker={openImagePicker}
+                      flash={flash}
+                      imageSource={imageSource}
                     />
                   </View>
                 </View>
@@ -455,3 +335,212 @@ function CameraView({navigation}) {
     </View>
   );
 }
+
+const AboveNavBarView = ({
+  ToggleDocumentScanner,
+  ToggleCopyText,
+  borderBottomColorOcr,
+  borderBottomColorDocMode,
+}) => {
+  return (
+    <View
+      style={{
+        ...styles.aboveButtomNavigationView,
+      }}>
+      <TouchableOpacity
+        style={{
+          borderBottomColor: borderBottomColorOcr,
+          borderBottomWidth: 2,
+        }}
+        onPress={() => ToggleCopyText()}>
+        <Text style={{fontFamily: 'Roboto'}}>Copy text</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          borderBottomColor: borderBottomColorDocMode,
+          borderBottomWidth: 2,
+        }}
+        onPress={() => ToggleDocumentScanner()}>
+        <Text style={{fontFamily: 'Roboto'}}>Document Scanner</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const ButtomNavigationView = ({
+  navigation,
+  takePicture,
+  toggleFlash,
+  openImagePicker,
+  flash,
+  imageSource,
+}) => {
+  return (
+    <View
+      style={{
+        ...styles.buttomNavigationView,
+      }}>
+      <Icon
+        name={
+          flash == RNCamera.Constants.FlashMode.on
+            ? 'flash-outline'
+            : 'flash-off-outline'
+        }
+        size={40}
+        type="ionicon"
+        color="white"
+        onPress={() => toggleFlash()}
+      />
+      <Icon
+        name="camera-outline"
+        type="ionicon"
+        size={40}
+        color="white"
+        onPress={() => takePicture()}
+      />
+      <Icon
+        name="image-outline"
+        type="ionicon"
+        size={40}
+        color="white"
+        onPress={() => openImagePicker()}
+      />
+      {imageSource ? (
+        <TouchableOpacity onPress={() => navigation.navigate('Gallery')}>
+          <Image
+            source={{
+              uri: imageSource,
+            }}
+            style={{width: 40, height: 40}}
+          />
+        </TouchableOpacity>
+      ) : (
+        <View
+          style={{
+            width: 40,
+            height: 40,
+            backgroundColor: 'rgba(0,0,0,0.8)',
+          }}></View>
+      )}
+    </View>
+  );
+};
+
+/* <View
+style={{
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  padding: 4,
+  backgroundColor: 'red',
+}}>
+<Icon
+  name="home-outline"
+  type="ionicon"
+  size={30}
+  color="white"
+  onPress={() => navigation.navigate('Dashboard')}
+/>
+<Icon
+  name="menu-outline"
+  type="ionicon"
+  color="white"
+  size={30}
+  onPress={() => toggleDrawer()}
+/>
+{drawer ? (
+  <Animatable.View
+    useNativeDriver
+    animation="bounceInDown"
+    duration={500}
+    easing="ease-in"
+    style={{
+      ...styles.DrawerView,
+    }}>
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text style={{color: 'white', fontSize: 20}}>
+        Under Development camera menu 0.1
+      </Text>
+    </View>
+    <View style={{...styles.DrawerContainer}}>
+      <Button
+        title={`Zoom ${zoomLevel}`}
+        onPress={() => setZoom()}
+      />
+      <Button
+        title="whiteBalance"
+        onPress={() => toggleWhiteBalance()}
+      />
+      <Button
+        title="exposure"
+        onPress={() => toggleExposure()}
+      />
+    </View>
+    {isToggleExposure ? (
+      <Animatable.View
+        animation="bounceIn"
+        style={{
+          ...styles.whiteBalanceWrapper,
+          marginVertical: 20,
+          alignItems: 'stretch',
+          justifyContent: 'center',
+        }}>
+        <Slider
+          onValueChange={(val) => setExposure(val)}
+          value={exposure}
+          step={0.1}
+          trackStyle={{
+            height: 10,
+            backgroundColor: 'transparent',
+          }}
+        />
+        <Text style={{fontSize: 20, color: 'white'}}>
+          Value: {exposure}
+        </Text>
+      </Animatable.View>
+    ) : null}
+    {isWhiteBalance ? (
+      <FilterOptions
+        sunny={sunny}
+        cloudy={cloudy}
+        fluorescent={fluorescent}
+        incandescent={incandescent}
+        shadow={shadow}
+        defaultMod={defaultMod}
+      />
+    ) : null}
+  </Animatable.View>
+) : null}
+</View> */
+
+// const FilterOptions = ({
+//   sunny,
+//   cloudy,
+//   fluorescent,
+//   incandescent,
+//   shadow,
+//   defaultMod,
+// }) => {
+//   return (
+//     <Animatable.View
+//       animation="bounceIn"
+//       style={{
+//         ...styles.whiteBalanceWrapper,
+//       }}>
+//       <View
+//         style={{
+//           ...styles.whiteBalanceView,
+//         }}>
+//         <Button title="sunny" onPress={() => sunny()} />
+//         <Button title="cloudy" onPress={() => cloudy()} />
+//         <Button title="fluorescent" onPress={() => fluorescent()} />
+//         <Button title="incandescent" onPress={() => incandescent()} />
+//         <Button title="shadow" onPress={() => shadow()} />
+//         <Button title="default Mod" onPress={() => defaultMod()} />
+//       </View>
+//     </Animatable.View>
+//   );
+// };

@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Dimensions, View} from 'react-native';
 import Pdf from 'react-native-pdf';
-import DocumentHeader from '../../components/DocumentHeader';
-import PdfContext from '../../components/context';
+import DocumentHeader from '../components/DocumentHeader';
+import PdfContext from '../components/context';
 
 export default function DocumentView({route, navigation}) {
   const {pdfUri} = route.params;

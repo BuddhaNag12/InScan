@@ -132,13 +132,6 @@ export default function Signin({navigation}) {
                 borderRadius: 60,
                 padding: 10,
                 backgroundColor: '#fefefe',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.2,
-                shadowRadius: 1.41,
                 elevation: 2,
               }}
               leftIcon={
@@ -190,7 +183,13 @@ export default function Signin({navigation}) {
               backgroundColor: '#FFE4DE',
             }}
           />
-          <View style={{borderTopLeftRadius: 75, backgroundColor: '#EAFFFE'}}>
+          <View
+            style={{
+              borderTopLeftRadius: 75,
+              backgroundColor: '#EAFFFE',
+              justifyContent: 'center',
+              alignItems:"center"
+            }}>
             <Text style={loginStyle.heading2Text}>Or Log In with</Text>
             <View
               style={{
@@ -203,7 +202,11 @@ export default function Signin({navigation}) {
                 type="google"
                 onPress={() => onGoogleButtonPress()}
               />
-              <SocialIcon raised type="facebook" onPress={()=>alert("Comming soon..")} />
+              <SocialIcon
+                raised
+                type="facebook"
+                onPress={() => alert('Comming soon..')}
+              />
             </View>
             <Text
               style={{
@@ -213,7 +216,9 @@ export default function Signin({navigation}) {
               }}>
               Need an account
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Sign Up')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Sign Up')}
+              style={{ width: '36%',borderBottomWidth:1,borderBottomColor:'black'}}>
               <Text
                 style={{
                   textAlign: 'center',
