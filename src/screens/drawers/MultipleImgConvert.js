@@ -219,6 +219,7 @@ const ImageGrid = ({navigation}) => {
       };
       RNImageToPdf.createPDFbyImages(options).then((pdf) => {
         setLoading(false);
+        reset();
         ToastAndroid.show(
           'PDF saved at location ' + pdf.filePath,
           ToastAndroid.LONG,

@@ -1,8 +1,6 @@
 import React from 'react';
 import {
   TouchableOpacity,
-  StyleSheet,
-  Dimensions,
   FlatList,
   View,
   Image,

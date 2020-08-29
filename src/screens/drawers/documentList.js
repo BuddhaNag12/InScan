@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, FlatList, TouchableWithoutFeedback} from 'react-native';
 import MyHeader from '../../components/header/Header';
-import {ListItem, Overlay, Button} from 'react-native-elements';
+import {ListItem, Overlay, Button, Badge} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Share from 'react-native-share';
 const RNFS = require('react-native-fs');
@@ -67,14 +67,19 @@ const DocumentList = ({navigation}) => {
   const IsDocs = () => {
     if (data.length > 0) {
       return (
-        <Text
+        <View
           style={{
-            textAlign: 'center',
-            fontFamily: 'Roboto',
-            textTransform: 'capitalize',
+            height: 50,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center',
           }}>
-          Documents
-        </Text>
+          <Text
+            style={{paddingHorizontal: 4, fontSize: 18, paddingVertical: 4}}>
+            No of Documents :
+          </Text>
+          <Badge status="success" value={<Text style={{color:"white"}}>{data.length}</Text>} />
+        </View>
       );
     } else {
       return (
@@ -93,12 +98,7 @@ const DocumentList = ({navigation}) => {
   return (
     <View style={{flex: 1}}>
       <MyHeader navigation={navigation} />
-      <View style={{height: 50, alignItems: 'center'}}>
-        <IsDocs />
-        <Text style={{paddingHorizontal: 4, fontSize: 18, paddingVertical: 4}}>
-          No of Documents : {data.length}
-        </Text>
-      </View>
+      <IsDocs />
       <Overlay
         animationType="fade"
         isVisible={visible}

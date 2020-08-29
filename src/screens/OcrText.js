@@ -25,7 +25,7 @@ const OcrText = ({route, navigation}) => {
   const ScreenShot = () => {
     captureRef(ViewRef, {
       format: 'jpg',
-      quality: 0.8,
+      quality: 1,
     })
       .then((uri) => {
         CameraRoll.save(uri, {type: 'photo', album: 'InScan_shots'}).then(

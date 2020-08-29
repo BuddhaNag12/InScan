@@ -14,12 +14,13 @@ import MyHeader from '../../components/header/Header';
 import CameraRoll from '@react-native-community/cameraroll';
 import ImagePicker from 'react-native-image-crop-picker';
 
-const {height,width} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const MyGallery = ({navigation}) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [isSelectionAll, setIsSelection] = useState(false);
 
   async function HasWritePermission() {
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
@@ -132,7 +133,6 @@ const MyGallery = ({navigation}) => {
       freeStyleCropEnabled: true,
       enableRotationGesture: true,
       showCropFrame: true,
-      compressImageQuality: 1,
       cropping: true,
       path: path,
       width: 600,
@@ -161,7 +161,13 @@ const MyGallery = ({navigation}) => {
         }
       });
   }
-
+  const SelectAll = () => {
+    //  console.log(photos);
+    alert('todo');
+  };
+  const showOption = () => {
+    setIsSelection(true);
+  };
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -172,53 +178,62 @@ const MyGallery = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <MyHeader navigation={navigation} />
+      <MyHeader
+        navigation={navigation}
+        isSelectionAll={isSelectionAll}
+        SelectAll={SelectAll}
+      />
       {photos.length > 0 ? (
         <FlatList
           data={photos}
-          numColumns={2}
+          numColumns={3}
           keyExtractor={(_, index) => index}
           renderItem={({item, index}) => (
             <View
               keyExtractor={(_, index) => index.toString()}
               style={{
-                flex:1,
-                justifyContent: "space-around",
-                alignItems:"center"
+                flex: 1,
               }}>
-              <TouchableOpacity
-                onPress={() => openPreview(item.node.image.uri)}>
-                <Image
-                  source={{uri: item.node.image.uri}} // Use item to set the image source
-                  key={index} // Important to set a key for list items
-                  style={{
-                    width: width/2-10,
-                    height: 180,
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    resizeMode: 'cover',
-                    margin: 4,
-                  }}
-                />
-              </TouchableOpacity>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                <Icon
-                  raised
-                  size={18}
-                  onPress={() => cropImage(item.node.image.uri)}
-                  name="create-outline"
-                  type="ionicon"
-                  color="#FF5D5D"
-                />
-                <Icon
-                  size={18}
-                  raised
-                  onPress={() => deletePhoto(item.node.image.uri)}
-                  name="trash-outline"
-                  type="ionicon"
-                  color="#574240"
-                />
+                style={{
+                  justifyContent: 'space-around',
+                  paddingHorizontal: 10,
+                  marginVertical: 5,
+                }}>
+                <TouchableOpacity
+                  onPress={() => openPreview(item.node.image.uri)}
+                  onLongPress={() => showOption()}>
+                  <Image
+                    source={{uri: item.node.image.uri}} // Use item to set the image source
+                    key={index} // Important to set a key for list items
+                    style={{
+                      width: 110,
+                      height: 110,
+                      resizeMode: 'cover',
+                    }}
+                  />
+                </TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <Icon
+                    raised
+                    size={18}
+                    onPress={() => cropImage(item.node.image.uri)}
+                    name="create-outline"
+                    type="ionicon"
+                    color="#FF5D5D"
+                  />
+                  <Icon
+                    size={18}
+                    raised
+                    onPress={() => deletePhoto(item.node.image.uri)}
+                    name="trash-outline"
+                    type="ionicon"
+                    color="#574240"
+                  />
+                </View>
               </View>
             </View>
           )}

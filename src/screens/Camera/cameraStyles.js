@@ -5,19 +5,16 @@ const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
   },
   FabButton: {
-    zIndex: 100,
+    zIndex: 999,
     borderRadius: 30,
     position: 'absolute',
     width: 50,
     height: 50,
-    alignItems: 'center',
     justifyContent: 'center',
-    right: 370,
-    bottom: 680,
+    right: 350,
+    bottom: 670,
   },
   preview: {
     flex: 1,
