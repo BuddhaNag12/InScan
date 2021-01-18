@@ -1,0 +1,7 @@
+Modify these files can avoid require cycle:
+IN DIR rn-fetch-blob/polyfill
+all thease 4 files: Blob.js, Fetch.js, FileReader.js, XMLHttpRequest.js
+
+// import RNFetchBlob from '../index.js'
+import {NativeModules} from 'react-native';
+const RNFetchBlob = NativeModules.RNFetchBlob

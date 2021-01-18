@@ -137,19 +137,15 @@ const ImageHeading = () => {
 };
 
 const AboutMeAvatar = () => {
+  const myImage=require('../../../assets/myPic.jpeg');
+
   return (
     <View>
       <View style={{...styles.headingWrapper}}>
         <Text style={{...styles.h3}}>About The Developer</Text>
       </View>
       <View style={{...styles.aboutWrapper}}>
-        <Avatar
-          rounded
-          source={{
-            uri:
-              'https://scontent.fgau2-1.fna.fbcdn.net/v/t1.0-9/106093797_3105706246172854_6244516452109243435_n.jpg?_nc_cat=105&_nc_sid=09cbfe&_nc_ohc=Cm3f2moh4ZgAX8tBqRI&_nc_ht=scontent.fgau2-1.fna&oh=e1f2ff3f30c72c9649c0050e68b61a88&oe=5F572093',
-          }}
-        />
+        <Image source={myImage} style={{width:100,height:100,resizeMode:"contain",borderRadius:30}}/>
         <Text
           style={{...styles.h2}}
           onPress={() =>

@@ -12,6 +12,7 @@ import Clipboard from '@react-native-community/clipboard';
 import CameraRoll from '@react-native-community/cameraroll';
 import {captureRef} from 'react-native-view-shot';
 import ViewShot from 'react-native-view-shot';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const OcrText = ({route, navigation}) => {
   const {text} = route.params;
@@ -118,22 +119,19 @@ const OcrText = ({route, navigation}) => {
         </TouchableOpacity>
       </View>
       <ViewShot ref={ViewRef} options={{format: 'jpg', quality: 1}}>
-        <TextInput
-        scrollEnabled={true}
-          style={{
-            fontSize: 20,
-            lineHeight: 40,
-            fontFamily: 'Roboto',
-            color: 'white',
-            padding: 10,
-          }}
-          value={text}
-          multiline={true}
-          editable={true}
-          showSoftInputOnFocus={false}
-          caretHidden={true}
-          selectionColor="#FF7772"
-        />
+        <ScrollView>
+          <Text
+            selectable
+            style={{
+              fontSize: 20,
+              lineHeight: 40,
+              fontFamily: 'Roboto',
+              color: 'white',
+              padding: 10,
+            }}>
+            {text}
+          </Text>
+        </ScrollView>
       </ViewShot>
     </View>
   );
